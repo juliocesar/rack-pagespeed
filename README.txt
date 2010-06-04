@@ -1,0 +1,1 @@
+Automagically bundles and compresses Javascript and CSS at the Rack level, so it works transparently.
