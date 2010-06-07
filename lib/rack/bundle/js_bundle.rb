@@ -1,7 +1,9 @@
 require 'md5'
 
 class Rack::Bundle::JSBundle
-  def initialize files
-    @files = files, @hash = MD5.new
+  attr_accessor :contents, :hash
+  def initialize *files
+    @contents = files.join ';'
+    @hash = MD5.new @contents
   end  
 end
