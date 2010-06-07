@@ -15,5 +15,5 @@ class Rack::Bundle::FileSystemStore
         file << bundle.contents
       end
     end
-  end
+  end  
 end

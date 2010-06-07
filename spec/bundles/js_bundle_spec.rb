@@ -5,7 +5,7 @@ describe Rack::Bundle::JSBundle do
     @bundle = Rack::Bundle::JSBundle.new $jquery, $mylib
   end
   
-  it 'contents of one or more Javascript file(s) accessible via #contents' do
+  it 'makes the contents of one or more Javascript file(s) accessible via #contents' do
     @bundle.contents.should == [$jquery, $mylib].join(';')
   end
   

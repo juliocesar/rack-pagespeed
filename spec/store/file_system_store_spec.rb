@@ -9,10 +9,21 @@ describe Rack::Bundle::FileSystemStore do
     subject.dir.should == Dir.tmpdir
   end
   
-  it "uses a flat file to store a bundle in the file system" do
-    bundle = mock(Rack::Bundle::JSBundle, :contents => $jquery, :hash => MD5.new($jquery))
-    subject.bundles << bundle
-    subject.save!
-    File.size(File.join(subject.dir, "rack-bundle-#{bundle.hash}.js")).should > 0
+  context 'storing bundles in the file system' do
+    before do
+      @store = Rack::Bundle::FileSystemStore.new
+      @jsbundle   = mock(Rack::Bundle::JSBundle, :contents => 'All we are saaaaaayin...', :hash => MD5.new($jquery))
+      @cssbundle  = mock(Rack::Bundle::CSSBundle, :contents => '... is give peace a chaaaaance', :hash => MD5.new($screen))
+      @store.bundles.concat [@jsbundle, @cssbundle]
+      @store.save!
+    end
+    
+    it 'stores Javascripts in a single Javascript file' do
+      File.size(File.join(@store.dir, "rack-bundle-#{@jsbundle.hash}.js")).should > 0
+    end
+    
+    it 'stores stylesheets in a single CSS file' do
+      File.size(File.join(@store.dir, "rack-bundle-#{@cssbundle.hash}.css")).should > 0
+    end
   end  
 end

@@ -8,4 +8,5 @@ end
 
 Spec::Runner.configure do 
   $jquery, $mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
+  $reset, $screen = fixture('reset.css'), fixture('screen.css')
 end
