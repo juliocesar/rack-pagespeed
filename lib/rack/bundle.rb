@@ -11,6 +11,7 @@ module Rack
     def initialize app, options = {:engine => FileSystemStore.new}
       @app = app
       @engine = engine
+      yield self if block_given?
     end
     
     def call env

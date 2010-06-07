@@ -2,8 +2,10 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'spec'
 require 'rack/bundle'
 
+FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
+
 def fixture name
-  File.read(File.join(File.dirname(__FILE__), 'fixtures', name))
+  File.read(File.join(FIXTURES_PATH, name))
 end
 
 def index_page
