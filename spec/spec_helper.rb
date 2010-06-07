@@ -7,5 +7,5 @@ def fixture name
 end
 
 Spec::Runner.configure do 
-  @jquery, @mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
+  $jquery, $mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
 end

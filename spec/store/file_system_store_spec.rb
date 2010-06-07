@@ -10,9 +10,9 @@ describe Rack::Bundle::FileSystemStore do
   end
   
   it "uses a flat file to store a bundle in the file system" do
-    bundle = Rack::Bundle::JSBundle.new @jquery
+    bundle = mock(Rack::Bundle::JSBundle, :contents => $jquery, :hash => MD5.new($jquery))
     subject.bundles << bundle
     subject.save!
-    File.exists?(File.join(subject.dir, "rack-bundle-#{bundle.hash}.js")).should be_true
+    File.size(File.join(subject.dir, "rack-bundle-#{bundle.hash}.js")).should > 0
   end  
 end
