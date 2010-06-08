@@ -3,14 +3,14 @@ require 'nokogiri'
 
 module Rack
   class Bundle
-    attr_accessor :engine, :document
+    attr_accessor :storage, :document, :js_path, :css_path
     autoload :FileSystemStore,  'rack/bundle/file_system_store'
     autoload :JSBundle,         'rack/bundle/js_bundle'
     autoload :CSSBundle,        'rack/bundle/css_bundle'
     
-    def initialize app, options = {:engine => FileSystemStore.new}
-      @app = app
-      @engine = engine
+    def initialize app, options = {:storage => FileSystemStore.new}
+      @app, @storage      = app, options[:storage]
+      @js_path, @css_path = options[:js_path], options[:css_path]
       yield self if block_given?
     end
     
@@ -26,7 +26,7 @@ module Rack
     end
     
     def replace_javascripts!
-      
+      scripts = @document.css('script[type="text/javascript"]')
     end
     
     def replace_stylesheets!

@@ -1,24 +1,18 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe Rack::Bundle do
-  
+describe Rack::Bundle do    
   before do
-    @bundle = Rack::Bundle.new(index_page, :js_path => FIXTURES_PATH, :css_path => FIXTURES_PATH)
-    @env = Rack::MockRequest.env_for('/')
+    @bundle = Rack::Bundle.new(index_page)
+    @env    = Rack::MockRequest.env_for('/')
   end
   
   it 'defaults to FileSystemStore for storage' do
-    @bundle.engine.is_a? Rack::Bundle::FileSystemStore
+    @bundle.storage.is_a? Rack::Bundle::FileSystemStore
   end
   
-  it 'needs to know where Javascripts are stored' do
-    pending
-  end
-  
-  it 'needs to know where stylesheets are stored' do
-    pending
-  end
-    
+  it "won't bundle Javascripts unless it knows the path to where they're stored"
+  it "won't bundle stylesheets unless it knows the path to where they're stored"
+
   context 'parsing HTML' do
     before do 
       status, headers, @response = @bundle.call(@env) 
@@ -34,9 +28,8 @@ describe Rack::Bundle do
       @bundle.document.should be_a Nokogiri::HTML::Document
     end
     
-    it "extracts all external links to Javascript files and instances a JSBundle with them" do
-    end
+    it "extracts all external links to Javascript files and instances a JSBundle with them"
     it "extracts all links to CSS and instances a CSSBundle with them"
-    it "stores the bundle(s) using the currently available engine"
+    it "stores the bundle(s) using the currently available storage engine"
   end
 end
