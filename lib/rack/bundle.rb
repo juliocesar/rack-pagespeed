@@ -26,10 +26,11 @@ module Rack
     end
     
     def replace_javascripts!
-      scripts = @document.css('script[type="text/javascript"]')
+      scripts = @document.css('script[src!=""]')
     end
     
     def replace_stylesheets!
+      styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value }
     end
     
     def optimize!
