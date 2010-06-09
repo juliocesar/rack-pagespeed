@@ -16,7 +16,7 @@ module Rack
     
     def call env
       status, headers, response = @app.call(env)
-      return @app.call(env) unless headers['Content-Type'] =~ /html/
+      return [status, headers, response] unless headers['Content-Type'] =~ /html/
       parse! response.body.join
       [status, headers, response]
     end
@@ -26,10 +26,17 @@ module Rack
     end
     
     def replace_javascripts!
-      scripts = @document.css('script[src!=""]')
+      return false unless @js_path
+      nodes = @document.css('script[src$=".js"]')
+      scripts = nodes.inject([]) do |node, scripts|
+        path = File.join(@js_path, node.attribute('src').value)
+        scripts << File.read(path) if File.exists?(path)
+        scripts
+      end
     end
     
     def replace_stylesheets!
+      return false unless @css_path
       styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value }
     end
     
@@ -38,6 +45,16 @@ module Rack
     end
     
     def store
+    end
+    
+    private    
+    def scripts
+      nodes = @document.css('script[src$=".js"]')
+      nodes.inject([]) do |contents, node|
+        path = ::File.join(@js_path, node.attribute('src').value)
+        contents << ::File.read(path) if ::File.exists?(path)
+        contents
+      end
     end
   end
 end

@@ -11,6 +11,7 @@ class Rack::Bundle::FileSystemStore
   def save!
     @bundles.each do |bundle|
       extension = bundle.is_a?(Rack::Bundle::JSBundle) ? 'js' : 'css'
+      next if File.exists? "#{dir}/rack-bundle-#{bundle.hash}.#{extension}"
       File.open("#{dir}/rack-bundle-#{bundle.hash}.#{extension}", 'w') do |file|
         file << bundle.contents
       end

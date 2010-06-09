@@ -5,5 +5,5 @@ class Rack::Bundle::JSBundle
   def initialize *files
     @contents = files.join ';'
     @hash = MD5.new @contents
-  end  
+  end
 end

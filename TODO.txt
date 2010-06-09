@@ -1,0 +1,1 @@
+- Generate JSBundle and CSSBundle off of file names, and read them only when strictly necessary.

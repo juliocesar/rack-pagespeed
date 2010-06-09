@@ -9,12 +9,21 @@ describe Rack::Bundle::FileSystemStore do
     subject.dir.should == Dir.tmpdir
   end
   
+  it "stores bundles in a location specified on the argument when instancing" do
+    Rack::Bundle::FileSystemStore.new(FIXTURES_PATH).dir.should == FIXTURES_PATH
+  end
+  
   context 'storing bundles in the file system' do
     before do
       @store = Rack::Bundle::FileSystemStore.new
       @jsbundle   = mock(Rack::Bundle::JSBundle, :contents => 'All we are saaaaaayin...', :hash => MD5.new($jquery))
       @cssbundle  = mock(Rack::Bundle::CSSBundle, :contents => '... is give peace a chaaaaance', :hash => MD5.new($screen))
       @store.bundles.concat [@jsbundle, @cssbundle]
+      @store.save!
+    end
+    
+    it 'skips saving a bundle if one with a matching hash already exists' do
+      File.should_not_receive(:open)
       @store.save!
     end
     
@@ -25,5 +34,5 @@ describe Rack::Bundle::FileSystemStore do
     it 'stores stylesheets in a single CSS file' do
       File.size(File.join(@store.dir, "rack-bundle-#{@cssbundle.hash}.css")).should > 0
     end
-  end  
+  end
 end
