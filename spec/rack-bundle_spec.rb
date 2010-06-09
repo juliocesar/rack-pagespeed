@@ -8,7 +8,7 @@ describe Rack::Bundle do
   end
 
   it 'defaults to FileSystemStore for storage' do
-    @bundle.storage.is_a? Rack::Bundle::FileSystemStore
+    Rack::Bundle.new(index_page).storage.is_a? Rack::Bundle::FileSystemStore
   end
 
   it "won't bundle Javascripts unless it knows the path to where they're stored"

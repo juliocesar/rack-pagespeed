@@ -27,6 +27,9 @@ module Rack
     
     def replace_javascripts!
       return false unless @js_path
+      @store.bundles << JSBundle.new(*scripts)
+      @store.save!
+      
       nodes = @document.css('script[src$=".js"]')
       scripts = nodes.inject([]) do |node, scripts|
         path = File.join(@js_path, node.attribute('src').value)
