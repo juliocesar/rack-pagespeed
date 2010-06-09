@@ -8,34 +8,34 @@ module Rack
     autoload :JSBundle,         'rack/bundle/js_bundle'
     autoload :CSSBundle,        'rack/bundle/css_bundle'
     
-    def initialize app, options = {:storage => FileSystemStore.new}
-      @app, @storage      = app, options[:storage]
-      @js_path, @css_path = options[:js_path], options[:css_path]
+    def initialize app, options = {}
+      @app = app
+      @js_path, @css_path, @public = options[:js_path], options[:css_path], options[:public]
+      raise ArgumentError, ":public needs to be a directory" unless ::File.directory? @public.to_s
+      @storage = FileSystemStore.new @public
       yield self if block_given?
     end
     
     def call env
-      status, headers, response = @app.call(env)
-      return [status, headers, response] unless headers['Content-Type'] =~ /html/
-      parse! response.body.join
-      [status, headers, response]
+      status, headers, @response = @app.call(env)
+      return [status, headers, @response] unless headers['Content-Type'] =~ /html/
+      parse!
+      [status, headers, [@document.to_html]]
     end
     
-    def parse! html
-      @document = Nokogiri::HTML(html)
+    def parse!
+      @document = Nokogiri::HTML(@response.body.join)
     end
     
     def replace_javascripts!
       return false unless @js_path
-      @store.bundles << JSBundle.new(*scripts)
-      @store.save!
-      
-      nodes = @document.css('script[src$=".js"]')
-      scripts = nodes.inject([]) do |node, scripts|
-        path = File.join(@js_path, node.attribute('src').value)
-        scripts << File.read(path) if File.exists?(path)
-        scripts
+      bundle = JSBundle.new *scripts
+      unless @store.has_bundle? bundle
+        @store.bundles << bundle
+        @store.save!      
       end
+      node = @document.create_element 'script', :type => 'text/javascript', :src => 
+      
     end
     
     def replace_stylesheets!

@@ -2,13 +2,17 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Rack::Bundle do
   before do
-    @bundle = Rack::Bundle.new(index_page, :js_path => FIXTURES_PATH, :css_path => FIXTURES_PATH)
+    @bundle = Rack::Bundle.new(index_page, :js_path => FIXTURES_PATH, :css_path => FIXTURES_PATH, :public => FIXTURES_PATH)
     @env    = Rack::MockRequest.env_for('/')
     status, headers, @response = @bundle.call(@env)
   end
+  
+  it "needs to know where the application's public directory is" do
+    lambda do Rack::Bundle.new(index_page) end.should raise_error(ArgumentError)
+  end
 
   it 'defaults to FileSystemStore for storage' do
-    Rack::Bundle.new(index_page).storage.is_a? Rack::Bundle::FileSystemStore
+    Rack::Bundle.new(index_page, :public => '.').storage.is_a? Rack::Bundle::FileSystemStore
   end
 
   it "won't bundle Javascripts unless it knows the path to where they're stored"
@@ -16,7 +20,7 @@ describe Rack::Bundle do
 
   context 'parsing HTML' do
     it "doesn't happen unless the response is HTML" do
-      bundle = Rack::Bundle.new plain_text
+      bundle = Rack::Bundle.new plain_text, :public => FIXTURES_PATH
       bundle.should_not_receive :parse!
       bundle.call(@env)
     end

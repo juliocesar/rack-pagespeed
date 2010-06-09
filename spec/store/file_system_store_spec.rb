@@ -1,16 +1,16 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Rack::Bundle::FileSystemStore do  
+  it "stores bundles in a location specified on the argument when instancing" do
+    Rack::Bundle::FileSystemStore.new(FIXTURES_PATH).dir.should == FIXTURES_PATH
+  end
+  
   it "keeps a collection of bundles in #bundles" do
     subject.bundles.should be_an Array
   end
   
   it "defaults to the system's temporary dir" do
     subject.dir.should == Dir.tmpdir
-  end
-  
-  it "stores bundles in a location specified on the argument when instancing" do
-    Rack::Bundle::FileSystemStore.new(FIXTURES_PATH).dir.should == FIXTURES_PATH
   end
   
   context 'storing bundles in the file system' do
@@ -22,6 +22,10 @@ describe Rack::Bundle::FileSystemStore do
       @store.save!
     end
     
+    it "checks if a bundle exists with #has_bundle?" do
+      @store.has_bundle?(@jsbundle).should be_true
+    end
+
     it 'skips saving a bundle if one with a matching hash already exists' do
       File.should_not_receive(:open)
       @store.save!
