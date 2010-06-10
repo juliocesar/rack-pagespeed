@@ -20,6 +20,7 @@ module Rack
       status, headers, @response = @app.call(env)
       return [status, headers, @response] unless headers['Content-Type'] =~ /html/
       parse!
+      replace_javascripts!
       [status, headers, [@document.to_html]]
     end
     
@@ -30,12 +31,17 @@ module Rack
     def replace_javascripts!
       return false unless @js_path
       bundle = JSBundle.new *scripts
-      unless @store.has_bundle? bundle
-        @store.bundles << bundle
-        @store.save!      
+      unless @storage.has_bundle? bundle
+        @storage.bundles << bundle
+        @storage.save!      
       end
-      node = @document.create_element 'script', :type => 'text/javascript', :src => 
-      
+      node = @document.create_element 'script', 
+        :type     => 'text/javascript', 
+        :src      => bundle_path(bundle),
+        :charset  => 'utf-8'
+      @document.css('head script:first').before(node)
+      @document.css('head script:gt(1)').remove
+      @document
     end
     
     def replace_stylesheets!
@@ -44,7 +50,7 @@ module Rack
     end
     
     def optimize!
-      replace_javascripts and replace_stylesheets!
+      # replace_javascripts and replace_stylesheets!
     end
     
     def store
@@ -59,5 +65,10 @@ module Rack
         contents
       end
     end
+    
+    def bundle_path bundle
+      '/rack-bundle-' + bundle.hash + '.' + (bundle.is_a?(JSBundle) ? 'js' : 'css')
+    end
+        
   end
 end

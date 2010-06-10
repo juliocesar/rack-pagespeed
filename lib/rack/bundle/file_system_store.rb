@@ -16,7 +16,7 @@ class Rack::Bundle::FileSystemStore
   def save!
     @bundles.each do |bundle|
       next if has_bundle? bundle
-      File.open("#{dir}/rack-bundle-#{bundle.hash}.#{extension}", 'w') do |file|
+      File.open("#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}", 'w') do |file|
         file << bundle.contents
       end
     end

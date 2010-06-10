@@ -1,6 +1,9 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'spec'
+require 'fileutils'
 require 'rack/bundle'
+include Rack::Utils
+alias :h :escape_html
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
@@ -17,9 +20,14 @@ def plain_text
 end
 
 
-Spec::Runner.configure do 
+Spec::Runner.configure do |config|
   $jquery, $mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
   $reset, $screen = fixture('reset.css'), fixture('screen.css')
   $index          = fixture('index.html')
   $doc            = Nokogiri::HTML($index)
+  
+  config.after(:all) do
+    `rm #{FIXTURES_PATH}/rack-bundle*`
+  end
+  
 end

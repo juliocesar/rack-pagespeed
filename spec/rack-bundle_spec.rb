@@ -14,7 +14,7 @@ describe Rack::Bundle do
   it 'defaults to FileSystemStore for storage' do
     Rack::Bundle.new(index_page, :public => '.').storage.is_a? Rack::Bundle::FileSystemStore
   end
-
+  
   it "won't bundle Javascripts unless it knows the path to where they're stored"
   it "won't bundle stylesheets unless it knows the path to where they're stored"
 
@@ -35,9 +35,15 @@ describe Rack::Bundle do
     it "stores the bundle(s) using the currently available storage engine"
   end
   
+  context 'modifying the DOM' do
+    it "adds a <script> tag to the document's head linking the Javascript bundle, then removes all others" do
+    end
+  end
+  
   context 'private methods' do
-    it 'returns an array with the contents of every Javascript on #scripts' do
-      @bundle.send(:scripts).should == [fixture('jquery-1.4.1.min.js'), fixture('mylib.js')]
+    it 'returns a URL to a bundle on #bundle_path' do
+      @jsbundle = Rack::Bundle::JSBundle.new 'omg'
+      @bundle.send(:bundle_path, @jsbundle).should == "/rack-bundle-#{@jsbundle.hash}.js"
     end
   end
 end
