@@ -21,6 +21,7 @@ module Rack
       return [status, headers, @response] unless headers['Content-Type'] =~ /html/
       parse!
       replace_javascripts!
+      replace_stylesheets!
       [status, headers, [@document.to_html]]
     end
     
@@ -29,7 +30,7 @@ module Rack
     end
     
     def replace_javascripts!
-      return false unless @js_path
+      return false unless @js_path and @document.css('head script[src$=".js"]').count > 1
       bundle = JSBundle.new *scripts
       unless @storage.has_bundle? bundle
         @storage.bundles << bundle
@@ -47,15 +48,11 @@ module Rack
     def replace_stylesheets!
       return false unless @css_path
       styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value }
+      styles.each_key do |media|
+        next if styles[media].count <= 1
+      end
     end
-    
-    def optimize!
-      # replace_javascripts and replace_stylesheets!
-    end
-    
-    def store
-    end
-    
+        
     private    
     def scripts
       nodes = @document.css('script[src$=".js"]')
@@ -67,7 +64,7 @@ module Rack
     end
     
     def bundle_path bundle
-      '/rack-bundle-' + bundle.hash + '.' + (bundle.is_a?(JSBundle) ? 'js' : 'css')
+      "/rack-bundle-#{bundle.hash}.#{bundle.extension}"
     end
         
   end

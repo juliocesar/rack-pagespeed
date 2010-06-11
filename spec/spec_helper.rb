@@ -15,6 +15,10 @@ def index_page
   lambda { |env| Rack::Response.new(fixture('index.html')).finish }
 end
 
+def simple_page
+  lambda { |env| Rack::Response.new(fixture('simple.html')).finish }
+end
+
 def plain_text
   lambda { |env| Rack::Response.new('plain texto', 200, 'Content-Type' => 'text/plain').finish }
 end
@@ -27,7 +31,7 @@ Spec::Runner.configure do |config|
   $doc            = Nokogiri::HTML($index)
   
   config.after(:all) do
-    `rm #{FIXTURES_PATH}/rack-bundle*`
+    `rm -f #{FIXTURES_PATH}/rack-bundle*`
   end
   
 end

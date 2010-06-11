@@ -6,7 +6,7 @@ A Rack middleware for grouping Javascripts into one single file. It also works f
 
 It parses the response body using [Nokogiri](http://nokogiri.org/), finds every reference to external scripts/stylesheets, locates
 them in the file system, bundles them, saves the bundle in the application's public directory, and replaces the references in the
-response for one single reference to the bundle(s). Easy bizy.
+response for one single reference to the bundle(s).
 
 # Performance
 
@@ -18,7 +18,7 @@ lazy you were when writing your layouts/templates. After the first release I'll 
 
 rack-bundle is, as of now, a lot simpler (as in less features) than solutions such as [Jammit](http://documentcloud.github.com/jammit/).
 But it is plug-and-play: you load up the middleware with a few configuration parameters and you're set. No need to modify templates, no
-helpers, nothing.
+helpers, nothing. Oh also, it's framework agnostic, and that's priceless.
 
 # Heroku
 
