@@ -34,15 +34,19 @@ describe Rack::Bundle do
       @simple = Rack::Bundle.new simple_page, :public_dir => FIXTURES_PATH
     end
     
+    it "leaves externally hosted Javascripts alone" do
+      @bundle.call @env
+      @bundle.document.css
+    end
+    
     it "skips #replace_javascripts! if there's only one script tag linking a Javascript in" do
       Rack::Bundle::JSBundle.should_not_receive :new
       @simple.call @env
     end
     
-    it "replaces multiple references to external Javascrips to one single reference to the bundle" do
+    it "replaces multiple references to Javascrips to one single reference to the bundle" do
       @bundle.call @env
-      jsbundle = @bundle.storage.bundles.select { |bundle| bundle.is_a? Rack::Bundle::JSBundle }.first
-      @bundle.document.css("head script[src$=\"#{@bundle.send(:bundle_path, jsbundle)}\"]").count.should == 1
+      @bundle.document.css('head script:not([src^="http"])').count.should == 1
     end
     
     it "skips #replace_stylesheets! if there's only one stylesheet being included in" do
@@ -56,7 +60,7 @@ describe Rack::Bundle do
       styles.each_key do |media|
         styles[media].count.should == 1
       end
-    end
+    end    
   end
 
   context 'private methods' do

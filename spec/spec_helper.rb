@@ -12,15 +12,15 @@ def fixture name
 end
 
 def index_page
-  lambda { |env| Rack::Response.new(fixture('index.html')).finish }
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('index.html')]] }
 end
 
 def simple_page
-  lambda { |env| Rack::Response.new(fixture('simple.html')).finish }
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('simple.html')]] }
 end
 
 def plain_text
-  lambda { |env| Rack::Response.new('plain texto', 200, 'Content-Type' => 'text/plain').finish }
+  lambda { |env| [200, { 'Content-Type' => 'text/plain' }, ['plain texto']] }
 end
 
 

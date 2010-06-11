@@ -25,19 +25,19 @@ module Rack
     end
     
     def parse!
-      @document = Nokogiri::HTML(@response.body.join)
+      @document = Nokogiri::HTML(@response.join)
     end
     
     def replace_javascripts!
-      return false unless @document.css('head script[src$=".js"]').count > 1
+      return false unless local_javascript_nodes.count > 1
       bundle = JSBundle.new *scripts
       @storage.bundles << bundle and @storage.save! unless @storage.has_bundle? bundle
-      node = @document.create_element 'script', 
+      bundle_node = @document.create_element 'script', 
         :type     => 'text/javascript', 
         :src      => bundle_path(bundle),
         :charset  => 'utf-8'
-      @document.css('head script:first').before(node)
-      @document.css('head script:gt(1)').remove
+      local_javascript_nodes.first.before(bundle_node)
+      local_javascript_nodes.slice(0..-1).remove
       @document
     end
     
@@ -61,8 +61,20 @@ module Rack
     end
         
     private
+    def local_javascript_nodes
+      @js_nodes ||= @document.css('head script[src$=".js"]:not([src^="http"])')
+    end
+    
+    def local_css_nodes
+      @document.css('head link[rel="stylesheet"]:local', Class.new {
+        def local nodeset
+          nodeset.find_all { |node| node['href'] =~ /\.css$/ and !(node['href'] =~ /^http/) }
+        end
+      }.new)      
+    end
+    
     def scripts
-      @document.css('script[src$=".js"]').inject([]) do |contents, node|
+      local_javascript_nodes.inject([]) do |contents, node|
         path = ::File.join(@public_dir, node.attribute('src').value)
         contents << ::File.read(path) if ::File.exists?(path)
         contents
