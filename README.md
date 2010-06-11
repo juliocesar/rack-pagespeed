@@ -2,6 +2,10 @@
 
 A Rack middleware for grouping Javascripts into one single file. It also works for stylesheets, grouping them by media type.
 
+# Installation
+
+    $ sudo gem install rack-bundle
+
 # Usage
 
 Rack:
