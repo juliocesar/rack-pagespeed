@@ -5,14 +5,13 @@ class Rack::Bundle::FileSystemStore
   
   def initialize dir = Dir.tmpdir
     @dir = dir
-    @bundles = []
+    @bundles = []    
   end
   
   def has_bundle? bundle
-    extension = bundle.is_a?(Rack::Bundle::JSBundle) ? 'js' : 'css'
-    File.exists? "#{dir}/rack-bundle-#{bundle.hash}.#{extension}"
+    File.exists? "#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}"
   end
-  
+    
   def save!
     @bundles.each do |bundle|
       next if has_bundle? bundle

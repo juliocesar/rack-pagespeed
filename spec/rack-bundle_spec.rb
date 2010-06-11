@@ -2,10 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Rack::Bundle do
   before do
-    @bundle = Rack::Bundle.new index_page,
-      :js_path => FIXTURES_PATH,
-      :css_path => FIXTURES_PATH,
-      :public => FIXTURES_PATH
+    @bundle = Rack::Bundle.new index_page, :public_dir => FIXTURES_PATH
     @env    = Rack::MockRequest.env_for('/')
   end
 
@@ -14,22 +11,15 @@ describe Rack::Bundle do
   end
 
   it 'defaults to FileSystemStore for storage' do
-    Rack::Bundle.new(index_page, :public => '.').storage.is_a? Rack::Bundle::FileSystemStore
+    Rack::Bundle.new(index_page, :public_dir => '.').storage.is_a? Rack::Bundle::FileSystemStore
   end
-
-  it "won't bundle Javascripts unless it knows the path to where they're stored" do
-    status, headers, @response = @bundle.call(@env)
-    bundle = Rack::Bundle.new(index_page, :css_path => FIXTURES_PATH, :public => FIXTURES_PATH)
-    Rack::Bundle::JSBundle.should_not_receive :new
-    bundle.call(@env)
-  end
-
-  it "won't bundle stylesheets unless it knows the path to where they're stored"
 
   context 'parsing the document' do
-    before do status, headers, @response = @bundle.call(@env) end
+    before do 
+      status, headers, @response = @bundle.call(@env) 
+    end
     it "doesn't happen unless the response is HTML" do
-      bundle = Rack::Bundle.new plain_text, :public => FIXTURES_PATH
+      bundle = Rack::Bundle.new plain_text, :public_dir => FIXTURES_PATH
       bundle.should_not_receive :parse!
       bundle.call(@env)
     end
@@ -40,14 +30,27 @@ describe Rack::Bundle do
   end
 
   context 'modifying the DOM' do
-    it "skips if there's only one script tag linking a Javascript in" do
-      bundle = Rack::Bundle.new simple_page,
-        :js_path => FIXTURES_PATH,
-        :css_path => FIXTURES_PATH,
-        :public => FIXTURES_PATH
-      Rack::Bundle::JSBundle.should_not_receive :new
-      bundle.call(@env)
+    before do
+      @simple = Rack::Bundle.new simple_page, :public_dir => FIXTURES_PATH
     end
+    
+    it "skips #replace_javascripts! if there's only one script tag linking a Javascript in" do
+      Rack::Bundle::JSBundle.should_not_receive :new
+      @simple.call(@env)
+    end
+    
+    it "replaces multiple references to external Javascrips to one single reference to the bundle" do
+      @bundle.call(@env)
+      jsbundle = @bundle.storage.bundles.select { |bundle| bundle.is_a? Rack::Bundle::JSBundle }.first
+      @bundle.document.css("head script[src$=\"#{@bundle.send(:bundle_path, jsbundle)}\"]").count.should == 1
+    end
+    
+    it "skips #replace_stylesheets! if there's only one stylesheet being included in" do
+      Rack::Bundle::CSSBundle.should_not_receive :new
+      @simple.call(@env)
+    end
+    
+    it "replaces references to external stylesheets of the same media type to their respective bundle"
   end
 
   context 'private methods' do

@@ -15,9 +15,15 @@ describe Rack::Bundle::FileSystemStore do
   
   context 'storing bundles in the file system' do
     before do
-      @store = Rack::Bundle::FileSystemStore.new
-      @jsbundle   = mock(Rack::Bundle::JSBundle, :contents => 'All we are saaaaaayin...', :hash => MD5.new($jquery))
-      @cssbundle  = mock(Rack::Bundle::CSSBundle, :contents => '... is give peace a chaaaaance', :hash => MD5.new($screen))
+      @store = Rack::Bundle::FileSystemStore.new FIXTURES_PATH
+      @jsbundle   = mock Rack::Bundle::JSBundle, 
+        :contents   => 'All we are saaaaaayin...', 
+        :hash       => MD5.new($jquery),
+        :extension  => 'js'
+      @cssbundle  = mock Rack::Bundle::CSSBundle, 
+        :contents   => '... is give peace a chaaaaance', 
+        :hash       => MD5.new($screen),
+        :extension  => 'css'
       @store.bundles.concat [@jsbundle, @cssbundle]
       @store.save!
     end
