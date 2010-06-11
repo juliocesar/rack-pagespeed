@@ -2,6 +2,32 @@
 
 A Rack middleware for grouping Javascripts into one single file. It also works for stylesheets, grouping them by media type.
 
+# Usage
+
+Rack:
+
+    use Rack::Bundle, :public_dir => "path to your application's public directory"
+    run app
+
+Sinatra it's almost the same as above, except you don't need to explicitly call run as Sinatra will handle that:
+
+    use Rack::Bundle, :public_dir => Sinatra::Application.public
+    
+As for Rails, google around how to add Rack middlewares to the stack. I'm too lazy right now to look it up. But as a
+general pointer, I know it's in _ROOT/config/environment.rb_.
+
+# A few assumptions
+
+There's a few assumptions that this middleware makes in order to work. Note that *all* of those will change soon:
+
+* That your app can write to a directory that's visible to the internet (a.k.a.: the application's public dir). I'm
+aware that from a security perspective (and for the sake of this working on Heroku), this is a *bad* idea. Consider this an interim
+measure so I can get something out quickly.
+* That external Javascripts (read: not hosted on the same web server as the app itself) come *first* in the DOM. This may or
+may not be an issue for you, but I've experienced a few. I'll add automatic reordering soon.
+* That you're linking Javascripts inside the <head> tag. It won't break your app if you don't. But scripts that sit outside
+will be ignored.
+
 # How does it work
 
 It parses the response body using [Nokogiri](http://nokogiri.org/), finds every reference to external scripts/stylesheets, locates
@@ -27,4 +53,4 @@ That will be addressed soon.
 
 # License
 
-It's as free as sneezing. Just give me credit if you make some extraordinary out of this.
+It's as free as sneezing. Just give me credit (http://twitter.com/julio_ody) if you make some extraordinary out of this.

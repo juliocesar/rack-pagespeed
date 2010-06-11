@@ -46,6 +46,7 @@ describe Rack::Bundle do
     
     it "replaces multiple references to Javascrips to one single reference to the bundle" do
       @bundle.call @env
+      puts h(@bundle.document.to_html)
       @bundle.document.css('head script:not([src^="http"])').count.should == 1
     end
     

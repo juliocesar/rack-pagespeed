@@ -42,8 +42,8 @@ module Rack
     end
     
     def replace_stylesheets!
-      return false unless @document.css('link[rel="stylesheet"]').count > 1
-      styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value rescue nil }
+      return false unless local_css_nodes.count > 1
+      styles = local_css_nodes.group_by { |node| node.attribute('media').value rescue nil }
       styles.each do |media, nodes|
         next unless nodes.count > 1
         stylesheets = stylesheet_contents_for nodes
@@ -66,11 +66,7 @@ module Rack
     end
     
     def local_css_nodes
-      @document.css('head link[rel="stylesheet"]:local', Class.new {
-        def local nodeset
-          nodeset.find_all { |node| node['href'] =~ /\.css$/ and !(node['href'] =~ /^http/) }
-        end
-      }.new)      
+      @css_nodes ||= @document.css('head link[href$=".css"]:not([href^="http"])')
     end
     
     def scripts
