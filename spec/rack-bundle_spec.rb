@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe Rack::Bundle do
   before do
     @bundle = Rack::Bundle.new index_page, :public_dir => FIXTURES_PATH
-    @env    = Rack::MockRequest.env_for('/')
+    @env    = Rack::MockRequest.env_for '/'
   end
 
   it "needs to know where the application's public directory is" do
@@ -21,7 +21,7 @@ describe Rack::Bundle do
     it "doesn't happen unless the response is HTML" do
       bundle = Rack::Bundle.new plain_text, :public_dir => FIXTURES_PATH
       bundle.should_not_receive :parse!
-      bundle.call(@env)
+      bundle.call @env
     end
 
     it 'does so with Nokogiri' do
@@ -36,21 +36,27 @@ describe Rack::Bundle do
     
     it "skips #replace_javascripts! if there's only one script tag linking a Javascript in" do
       Rack::Bundle::JSBundle.should_not_receive :new
-      @simple.call(@env)
+      @simple.call @env
     end
     
     it "replaces multiple references to external Javascrips to one single reference to the bundle" do
-      @bundle.call(@env)
+      @bundle.call @env
       jsbundle = @bundle.storage.bundles.select { |bundle| bundle.is_a? Rack::Bundle::JSBundle }.first
       @bundle.document.css("head script[src$=\"#{@bundle.send(:bundle_path, jsbundle)}\"]").count.should == 1
     end
     
     it "skips #replace_stylesheets! if there's only one stylesheet being included in" do
       Rack::Bundle::CSSBundle.should_not_receive :new
-      @simple.call(@env)
+      @simple.call @env
     end
     
-    it "replaces references to external stylesheets of the same media type to their respective bundle"
+    it "replaces references to external stylesheets of the same media type to their respective bundle" do
+      @bundle.call @env
+      styles = @bundle.document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value rescue nil }
+      styles.each_key do |media|
+        styles[media].count.should == 1
+      end
+    end
   end
 
   context 'private methods' do

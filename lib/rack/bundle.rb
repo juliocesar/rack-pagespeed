@@ -42,17 +42,25 @@ module Rack
     end
     
     def replace_stylesheets!
-      return false unless @document.css('link[rel="styleshet"]').count > 1
-      styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value }
-      styles.each_key do |media|
-        next unless styles[media].count > 1
-        stylesheets = stylesheet_contents_for styles[media]
+      return false unless @document.css('link[rel="stylesheet"]').count > 1
+      styles = @document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value rescue nil }
+      styles.each do |media, nodes|
+        next unless nodes.count > 1
+        stylesheets = stylesheet_contents_for nodes
         bundle = CSSBundle.new *stylesheets
         @storage.bundles << bundle and @storage.save! unless @storage.has_bundle? bundle        
+        node = @document.create_element 'link', 
+          :rel    => 'stylesheet', 
+          :type   => 'text/css',
+          :href   => bundle_path(bundle),
+          :media  => media
+        nodes.first.before(node)
+        nodes.map { |node| node.remove }
       end
+      @document
     end
         
-    private    
+    private
     def scripts
       @document.css('script[src$=".js"]').inject([]) do |contents, node|
         path = ::File.join(@public_dir, node.attribute('src').value)
@@ -62,7 +70,7 @@ module Rack
     end
     
     def stylesheet_contents_for nodes
-      @document.css('link[href$=".css"]').inject([]) do |contents, node|
+      nodes.inject([]) do |contents, node|
         path = ::File.join(@public_dir, node.attribute('href').value)
         contents << ::File.read(path) if ::File.exists?(path)
         contents
