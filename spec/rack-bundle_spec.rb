@@ -13,6 +13,23 @@ describe Rack::Bundle do
   it 'defaults to FileSystemStore for storage' do
     Rack::Bundle.new(index_page, :public_dir => '.').storage.is_a? Rack::Bundle::FileSystemStore
   end
+  
+  context 'serving bundles' do
+    before do
+      @jsbundle, @cssbundle = mock_js_bundle, mock_css_bundle
+      @bundle.storage.bundles << @jsbundle
+      @bundle.storage.bundles << @cssbundle
+      @js_request   = Rack::MockRequest.env_for @bundle.send(:bundle_path, @jsbundle)
+      @css_request  = Rack::MockRequest.env_for @bundle.send(:bundle_path, @cssbundle)
+    end
+    
+    it "fetches a Javascript bundle from storage and serves if the request URL matches" do
+      @bundle.storage.should_receive :find_bundle_by_hash
+      status, headers, response = @bundle.call @js_request      
+      response.join.should == @jsbundle.contents
+    end
+    it "fetches a CSS bundle from storage and serves if the request URL matches"    
+  end
 
   context 'parsing the document' do
     before do 
@@ -46,8 +63,7 @@ describe Rack::Bundle do
     
     it "replaces multiple references to Javascrips to one single reference to the bundle" do
       @bundle.call @env
-      puts h(@bundle.document.to_html)
-      @bundle.document.css('head script:not([src^="http"])').count.should == 1
+      @bundle.document.css(Rack::Bundle::SELECTORS.js).count.should == 1
     end
     
     it "skips #replace_stylesheets! if there's only one stylesheet being included in" do
@@ -57,7 +73,7 @@ describe Rack::Bundle do
     
     it "replaces references to external stylesheets of the same media type to their respective bundle" do
       @bundle.call @env
-      styles = @bundle.document.css('link[rel="stylesheet"]').group_by { |node| node.attribute('media').value rescue nil }
+      styles = @bundle.document.css(Rack::Bundle::SELECTORS.css).group_by { |node| node.attribute('media').value rescue nil }
       styles.each_key do |media|
         styles[media].count.should == 1
       end

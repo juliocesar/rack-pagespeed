@@ -1,6 +1,13 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe Rack::Bundle::FileSystemStore do  
+  before do
+    @jsbundle, @cssbundle = mock_js_bundle, mock_css_bundle
+    @storage = Rack::Bundle::FileSystemStore.new FIXTURES_PATH
+    @storage.bundles << @jsbundle
+    @storage.bundles << @cssbundle    
+  end
+  
   it "stores bundles in a location specified on the argument when instancing" do
     Rack::Bundle::FileSystemStore.new(FIXTURES_PATH).dir.should == FIXTURES_PATH
   end
@@ -13,36 +20,31 @@ describe Rack::Bundle::FileSystemStore do
     subject.dir.should == Dir.tmpdir
   end
   
+  it "finds a bundle by it's hash on #find_bundle_by_hash" do
+    @storage.find_bundle_by_hash(@jsbundle.hash).should == @jsbundle
+  end
+    
   context 'storing bundles in the file system' do
-    before do
-      @store = Rack::Bundle::FileSystemStore.new FIXTURES_PATH
-      @jsbundle   = mock Rack::Bundle::JSBundle, 
-        :contents   => 'All we are saaaaaayin...', 
-        :hash       => MD5.new($jquery),
-        :extension  => 'js'
-      @cssbundle  = mock Rack::Bundle::CSSBundle, 
-        :contents   => '... is give peace a chaaaaance', 
-        :hash       => MD5.new($screen),
-        :extension  => 'css'
-      @store.bundles.concat [@jsbundle, @cssbundle]
-      @store.save!
+    before do      
+      @storage.bundles.concat [@jsbundle, @cssbundle]
+      @storage.save!
     end
     
     it "checks if a bundle exists with #has_bundle?" do
-      @store.has_bundle?(@jsbundle).should be_true
+      @storage.has_bundle?(@jsbundle).should be_true
     end
 
     it 'skips saving a bundle if one with a matching hash already exists' do
       File.should_not_receive(:open)
-      @store.save!
+      @storage.save!
     end
     
     it 'stores Javascripts in a single Javascript file' do
-      File.size(File.join(@store.dir, "rack-bundle-#{@jsbundle.hash}.js")).should > 0
+      File.size(File.join(@storage.dir, "rack-bundle-#{@jsbundle.hash}.js")).should > 0
     end
     
     it 'stores stylesheets in a single CSS file' do
-      File.size(File.join(@store.dir, "rack-bundle-#{@cssbundle.hash}.css")).should > 0
+      File.size(File.join(@storage.dir, "rack-bundle-#{@cssbundle.hash}.css")).should > 0
     end
   end
 end

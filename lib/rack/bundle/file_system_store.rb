@@ -8,6 +8,11 @@ class Rack::Bundle::FileSystemStore
     @bundles = []    
   end
   
+  def find_bundle_by_hash hash
+    puts "OMG"
+    @bundles.select { |bundle| bundle.hash == hash }.first
+  end
+    
   def has_bundle? bundle
     File.exists? "#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}"
   end

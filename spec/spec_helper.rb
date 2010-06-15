@@ -11,6 +11,20 @@ def fixture name
   File.read(File.join(FIXTURES_PATH, name))
 end
 
+def mock_js_bundle
+  mock Rack::Bundle::JSBundle, 
+    :extension => 'js', 
+    :contents => 'La laaaa', 
+    :hash => MD5.new('La laaa ra laaa laa').to_s
+end
+
+def mock_css_bundle
+  mock Rack::Bundle::CSSBundle,
+    :extension => 'css', 
+    :contents => 'La la laaaaaaa', 
+    :hash => MD5.new('La laaa ra laaa laa times two').to_s
+end
+
 def index_page
   lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('index.html')]] }
 end
