@@ -23,12 +23,11 @@ describe Rack::Bundle do
       @css_request  = Rack::MockRequest.env_for @bundle.send(:bundle_path, @cssbundle)
     end
     
-    it "fetches a Javascript bundle from storage and serves if the request URL matches" do
-      @bundle.storage.should_receive :find_bundle_by_hash
+    it "fetches a bundle from storage and serves if the request URL matches" do
+      @bundle.storage.should_receive(:find_bundle_by_hash).with(@jsbundle.hash).and_return(@jsbundle)
       status, headers, response = @bundle.call @js_request      
       response.join.should == @jsbundle.contents
     end
-    it "fetches a CSS bundle from storage and serves if the request URL matches"    
   end
 
   context 'parsing the document' do
