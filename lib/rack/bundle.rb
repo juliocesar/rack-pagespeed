@@ -9,6 +9,7 @@ module Rack
     )
     attr_accessor :storage, :document, :public_dir
     autoload :FileSystemStore,  'rack/bundle/file_system_store'
+    autoload :DatabaseStore,    'rack/bundle/database_store'
     autoload :JSBundle,         'rack/bundle/js_bundle'
     autoload :CSSBundle,        'rack/bundle/css_bundle'
 

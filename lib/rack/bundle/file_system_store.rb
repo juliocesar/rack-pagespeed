@@ -9,7 +9,6 @@ class Rack::Bundle::FileSystemStore
   end
   
   def find_bundle_by_hash hash
-    puts "SD"
     @bundles.select { |bundle| bundle.hash == hash }.first
   end
     

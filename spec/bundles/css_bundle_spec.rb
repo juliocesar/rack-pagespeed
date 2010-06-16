@@ -10,6 +10,6 @@ describe Rack::Bundle::CSSBundle do
   end
   
   it 'creates a MD5 hash out of the contents of the bundle' do    
-    @bundle.hash.should == MD5.new(@bundle.contents)
+    @bundle.hash.should == MD5.new(@bundle.contents).to_s
   end
 end
