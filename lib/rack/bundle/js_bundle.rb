@@ -12,6 +12,6 @@ class Rack::Bundle::JSBundle
   end
   
   def == bundle
-    self.class == bundle.class && self.hash == bundle.hash
+    self.class == bundle.class && hash == bundle.hash
   end  
 end

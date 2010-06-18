@@ -5,7 +5,6 @@ class Rack::Bundle::DatabaseStore
   
   def initialize url = ENV['DATABASE_URL']
     @db = Sequel.connect(url)
-    @bundles = []
     create_table!
   end
   

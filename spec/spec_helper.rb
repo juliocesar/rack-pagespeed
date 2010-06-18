@@ -12,18 +12,12 @@ def fixture name
   File.read(File.join(FIXTURES_PATH, name))
 end
 
-def mock_js_bundle
-  mock Rack::Bundle::JSBundle, 
-    :extension => 'js', 
-    :contents => 'La laaaa', 
-    :hash => MD5.new('La laaa ra laaa laa').to_s
+def make_js_bundle
+  Rack::Bundle::JSBundle.new 'La laaaa'
 end
 
-def mock_css_bundle
-  mock Rack::Bundle::CSSBundle,
-    :extension => 'css', 
-    :contents => 'La la laaaaaaa', 
-    :hash => MD5.new('La laaa ra laaa laa times two').to_s
+def make_css_bundle
+  Rack::Bundle::CSSBundle.new 'La la laaaaaaa'
 end
 
 def index_page

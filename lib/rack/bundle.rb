@@ -21,16 +21,12 @@ module Rack
     end
 
     def call env
-      puts "IN IT"
       if match = %r(^/rack-bundle-(\w+)).match(env['PATH_INFO'])
-        puts "BUNDLE REQUEST: #{env['PATH_INFO']}"
         bundle = @storage.find_bundle_by_hash match[1]
         bundle ? respond_with(bundle) : not_found
       else
-        puts "NON BUNDLE REQUEST: #{env['PATH_INFO']}"
         status, headers, @response = @app.call(env)
         unless headers['Content-Type'] =~ /html/
-          puts "RETURNING"
           return [status, headers, @response] 
         end
         parse!

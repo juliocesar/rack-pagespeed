@@ -30,10 +30,9 @@ describe Rack::Bundle::DatabaseStore do
     end
   end
   
-  it "saves bundles to the database on #save!" do
-    jsbundle = mock_js_bundle
-    @db_store.bundles << jsbundle
-    @db_store.save!
+  it "saves bundles to the database on #add" do
+    jsbundle = make_js_bundle
+    @db_store.add jsbundle
     @db_store.db[:rack_bundle].where(:hash => jsbundle.hash).first[:hash].should == jsbundle.hash
   end
 end
