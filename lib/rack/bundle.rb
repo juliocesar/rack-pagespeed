@@ -15,18 +15,24 @@ module Rack
 
     def initialize app, options = {}
       @app, @public_dir = app, options[:public_dir]
-      raise ArgumentError, ":public needs to be a directory" unless ::File.directory?(@public_dir.to_s)
       @storage = options[:storage] || FileSystemStore.new(@public_dir)
-      yield self if block_given?
+      yield self if block_given?      
+      raise ArgumentError, ":public_dir needs to be a directory" unless ::File.directory?(@public_dir.to_s)
     end
 
     def call env
+      puts "IN IT"
       if match = %r(^/rack-bundle-(\w+)).match(env['PATH_INFO'])
+        puts "BUNDLE REQUEST: #{env['PATH_INFO']}"
         bundle = @storage.find_bundle_by_hash match[1]
         bundle ? respond_with(bundle) : not_found
       else
+        puts "NON BUNDLE REQUEST: #{env['PATH_INFO']}"
         status, headers, @response = @app.call(env)
-        return [status, headers, @response] unless headers['Content-Type'] =~ /html/
+        unless headers['Content-Type'] =~ /html/
+          puts "RETURNING"
+          return [status, headers, @response] 
+        end
         parse!
         replace_javascripts!
         replace_stylesheets!
@@ -41,7 +47,7 @@ module Rack
     def replace_javascripts!
       return false unless local_javascript_nodes.count > 1
       bundle = JSBundle.new *scripts
-      @storage.bundles << bundle and @storage.save! unless @storage.has_bundle? bundle
+      @storage.add bundle unless @storage.has_bundle? bundle
       bundle_node = @document.create_element 'script',
         :type     => 'text/javascript',
         :src      => bundle_path(bundle),
@@ -58,7 +64,7 @@ module Rack
         next unless nodes.count > 1
         stylesheets = stylesheet_contents_for nodes
         bundle = CSSBundle.new *stylesheets
-        @storage.bundles << bundle and @storage.save! unless @storage.has_bundle? bundle
+        @storage.add bundle unless @storage.has_bundle? bundle
         node = @document.create_element 'link',
           :rel    => 'stylesheet',
           :type   => 'text/css',

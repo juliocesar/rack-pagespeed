@@ -16,21 +16,18 @@ class Rack::Bundle::DatabaseStore
       Rack::Bundle::CSSBundle.new(result[:contents])
   end
   
-  def save!
-    @bundles.each do |bundle|
-      unless has_bundle?(bundle)
-        @db[:rack_bundle].insert :contents => bundle.contents, 
-          :hash => bundle.hash,
-          :type => bundle.is_a?(Rack::Bundle::JSBundle) ? 'js' : 'css'
-      end
-    end
+  def add bundle
+    return false if has_bundle? bundle
+    @db[:rack_bundle].insert :contents => bundle.contents, 
+      :hash => bundle.hash,
+      :type => bundle.is_a?(Rack::Bundle::JSBundle) ? 'js' : 'css'
   end
   
   def has_bundle? bundle
     not find_bundle_by_hash(bundle.hash).nil?
   end
     
-  private
+  private  
   def create_table!
     @db.create_table! 'rack_bundle' do
       String  :hash

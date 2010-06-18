@@ -9,19 +9,19 @@ class Rack::Bundle::FileSystemStore
   end
   
   def find_bundle_by_hash hash
-    @bundles.select { |bundle| bundle.hash == hash }.first
+    found = Dir["#{dir}/rack-bundle-#{hash}.*"]
+    return nil unless found.any?
+    type, contents = File.extname(found.first).sub(/^./, ''), File.read(File.join(dir, found.first))
+    type == 'js' ? Rack::Bundle::JSBundle.new(contents) : Rack::Bundle::CSSBundle.new(contents)
   end
     
   def has_bundle? bundle
     File.exists? "#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}"
   end
-    
-  def save!
-    @bundles.each do |bundle|
-      next if has_bundle? bundle
-      File.open("#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}", 'w') do |file|
-        file << bundle.contents
-      end
-    end
-  end  
+  
+  def add bundle
+    File.open("#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}", 'w') do |file|
+      file << bundle.contents
+    end    
+  end    
 end

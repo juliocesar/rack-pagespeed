@@ -29,4 +29,11 @@ describe Rack::Bundle::DatabaseStore do
       @db_store.find_bundle_by_hash('non existant').should be_nil
     end
   end
+  
+  it "saves bundles to the database on #save!" do
+    jsbundle = mock_js_bundle
+    @db_store.bundles << jsbundle
+    @db_store.save!
+    @db_store.db[:rack_bundle].where(:hash => jsbundle.hash).first[:hash].should == jsbundle.hash
+  end
 end
