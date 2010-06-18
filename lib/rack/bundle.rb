@@ -26,9 +26,7 @@ module Rack
         bundle ? respond_with(bundle) : not_found
       else
         status, headers, @response = @app.call(env)
-        unless headers['Content-Type'] =~ /html/
-          return [status, headers, @response] 
-        end
+        return [status, headers, @response] unless headers['Content-Type'] =~ /html/
         parse!
         replace_javascripts!
         replace_stylesheets!
@@ -41,20 +39,20 @@ module Rack
     end
 
     def replace_javascripts!
-      return false unless local_javascript_nodes.count > 1
+      return unless @document.css(SELECTORS.js).count > 1
       bundle = JSBundle.new *scripts
       @storage.add bundle unless @storage.has_bundle? bundle
       bundle_node = @document.create_element 'script',
         :type     => 'text/javascript',
         :src      => bundle_path(bundle),
         :charset  => 'utf-8'
-      local_javascript_nodes.first.before(bundle_node)
-      local_javascript_nodes.slice(0..-1).remove
+      @document.css(SELECTORS.js).first.before(bundle_node)
+      @document.css(SELECTORS.js).slice(1..-1).remove
       @document
     end
 
     def replace_stylesheets!
-      return false unless local_css_nodes.count > 1
+      return unless local_css_nodes.count > 1
       styles = local_css_nodes.group_by { |node| node.attribute('media').value rescue nil }
       styles.each do |media, nodes|
         next unless nodes.count > 1
@@ -74,11 +72,11 @@ module Rack
 
     private
     def local_javascript_nodes
-      @js_nodes ||= @document.css(SELECTORS.js)
+      @document.css(SELECTORS.js)
     end
 
     def local_css_nodes
-      @css_nodes ||= @document.css(SELECTORS.css)
+      @document.css(SELECTORS.css)
     end
 
     def scripts

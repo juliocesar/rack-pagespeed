@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-bundle}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Julio Cesar Ody"]
-  s.date = %q{2010-06-11}
+  s.date = %q{2010-06-18}
   s.description = %q{Javascript and CSS bundling at the Rack level}
   s.email = %q{julio.ody@gmail.com}
   s.extra_rdoc_files = [
@@ -24,8 +24,10 @@ Gem::Specification.new do |s|
      "lib/rack-bundle.rb",
      "lib/rack/bundle.rb",
      "lib/rack/bundle/css_bundle.rb",
+     "lib/rack/bundle/database_store.rb",
      "lib/rack/bundle/file_system_store.rb",
      "lib/rack/bundle/js_bundle.rb",
+     "rack-bundle.gemspec",
      "spec/bundles/css_bundle_spec.rb",
      "spec/bundles/js_bundle_spec.rb",
      "spec/fixtures/hh-reset.css",
@@ -40,6 +42,7 @@ Gem::Specification.new do |s|
      "spec/fixtures/simple.html",
      "spec/rack-bundle_spec.rb",
      "spec/spec_helper.rb",
+     "spec/store/database_store_spec.rb",
      "spec/store/file_system_store_spec.rb",
      "vendor/jsmin.rb"
   ]
@@ -53,6 +56,7 @@ Gem::Specification.new do |s|
      "spec/bundles/js_bundle_spec.rb",
      "spec/rack-bundle_spec.rb",
      "spec/spec_helper.rb",
+     "spec/store/database_store_spec.rb",
      "spec/store/file_system_store_spec.rb"
   ]
 

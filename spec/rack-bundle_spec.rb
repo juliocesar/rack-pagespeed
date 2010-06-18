@@ -16,9 +16,9 @@ describe Rack::Bundle do
   
   context 'serving bundles' do
     before do
-      @jsbundle, @cssbundle = mock_js_bundle, mock_css_bundle
-      @bundle.storage.bundles << @jsbundle
-      @bundle.storage.bundles << @cssbundle
+      @jsbundle, @cssbundle = make_js_bundle, make_css_bundle
+      @bundle.storage.add  @jsbundle
+      @bundle.storage.add @cssbundle
       @js_request   = Rack::MockRequest.env_for @bundle.send(:bundle_path, @jsbundle)
       @css_request  = Rack::MockRequest.env_for @bundle.send(:bundle_path, @cssbundle)
     end
