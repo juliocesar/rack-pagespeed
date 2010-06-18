@@ -10,4 +10,8 @@ class Rack::Bundle::CSSBundle
   def extension
     'css'
   end
+  
+  def == bundle
+    self.class == bundle.class && self.hash == bundle.hash
+  end  
 end

@@ -10,4 +10,8 @@ class Rack::Bundle::JSBundle
   def extension
     'js'
   end
+  
+  def == bundle
+    self.class == bundle.class && self.hash == bundle.hash
+  end  
 end

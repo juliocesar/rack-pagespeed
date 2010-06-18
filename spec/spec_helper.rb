@@ -2,6 +2,7 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'spec'
 require 'fileutils'
 require 'rack/bundle'
+require 'tmpdir'
 include Rack::Utils
 alias :h :escape_html
 
