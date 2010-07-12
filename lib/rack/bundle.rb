@@ -30,7 +30,9 @@ module Rack
         parse!
         replace_javascripts!
         replace_stylesheets!
-        [status, headers, [@document.to_html]]
+        body = @document.to_html
+        headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # Not sure how UTF-8 plays into this
+        [status, headers, [body]]
       end
     end
 
