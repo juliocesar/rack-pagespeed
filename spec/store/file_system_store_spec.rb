@@ -25,12 +25,12 @@ describe Rack::Bundle::FileSystemStore do
     Rack::Bundle::FileSystemStore.new FIXTURES_PATH
     File.exists?(FIXTURES_PATH + '/rack-bundle-1234567890.js').should be_false
   end
+  
+  it "checks if a bundle exists with #has_bundle?" do
+    @storage.has_bundle?(@jsbundle).should be_true
+  end
     
   context 'storing bundles in the file system' do
-    it "checks if a bundle exists with #has_bundle?" do
-      @storage.has_bundle?(@jsbundle).should be_true
-    end
-
     it 'skips saving a bundle if one with a matching hash already exists' do
       File.should_not_receive(:open)
     end

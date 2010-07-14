@@ -19,7 +19,7 @@ class Rack::Bundle::Base
   end
   
   def hash
-    @hash ||= MD5.new(@files.map { |file| File.basename(file.path) }.join).to_s
+    @hash ||= MD5.new(@files.map { |file| File.basename(file.path) + File.mtime(file.path).to_s }.join).to_s
   end
   
   def path

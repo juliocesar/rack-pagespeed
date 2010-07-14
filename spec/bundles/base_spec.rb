@@ -16,8 +16,8 @@ describe Rack::Bundle::Base do
     @bundle.contents.should == [$jquery.contents, $mylib.contents].join(';')
   end
 
-  it 'creates a MD5 hash out of the file names in the bundle' do    
-    @bundle.hash.should == MD5.new([filename($jquery), filename($mylib)].join).to_s
+  it 'creates a MD5 hash out of the file names and mtimes in the bundle' do    
+    @bundle.hash.should == MD5.new([filename($jquery) + File.mtime($jquery.path).to_s, filename($mylib) + File.mtime($mylib.path).to_s].join).to_s
   end
   
   it 'returns the path through which the bundle can be retrieved on #path' do
