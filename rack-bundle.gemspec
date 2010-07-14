@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-bundle}
-  s.version = "0.2.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Julio Cesar Ody"]
-  s.date = %q{2010-07-12}
+  s.date = %q{2010-07-14}
   s.description = %q{Javascript and CSS bundling at the Rack level}
   s.email = %q{julio.ody@gmail.com}
   s.extra_rdoc_files = [
@@ -23,13 +23,15 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/rack-bundle.rb",
      "lib/rack/bundle.rb",
-     "lib/rack/bundle/css_bundle.rb",
+     "lib/rack/bundle/bundles/base.rb",
+     "lib/rack/bundle/bundles/css.rb",
+     "lib/rack/bundle/bundles/js.rb",
      "lib/rack/bundle/database_store.rb",
      "lib/rack/bundle/file_system_store.rb",
-     "lib/rack/bundle/js_bundle.rb",
      "rack-bundle.gemspec",
-     "spec/bundles/css_bundle_spec.rb",
-     "spec/bundles/js_bundle_spec.rb",
+     "spec/bundles/base_spec.rb",
+     "spec/bundles/css_spec.rb",
+     "spec/bundles/js_spec.rb",
      "spec/fixtures/hh-reset.css",
      "spec/fixtures/index.html",
      "spec/fixtures/iphone.css",
@@ -52,8 +54,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Javascript and CSS bundling at the Rack level}
   s.test_files = [
-    "spec/bundles/css_bundle_spec.rb",
-     "spec/bundles/js_bundle_spec.rb",
+    "spec/bundles/base_spec.rb",
+     "spec/bundles/css_spec.rb",
+     "spec/bundles/js_spec.rb",
      "spec/rack-bundle_spec.rb",
      "spec/spec_helper.rb",
      "spec/store/database_store_spec.rb",
