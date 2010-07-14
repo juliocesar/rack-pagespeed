@@ -26,7 +26,7 @@ class Rack::Bundle::DatabaseStore
     not find_bundle_by_hash(bundle.hash).nil?
   end
     
-  private  
+  private
   def create_table!
     @db.create_table! 'rack_bundle' do
       String  :hash

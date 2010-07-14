@@ -76,7 +76,7 @@ describe Rack::Bundle do
       @simple = Rack::Bundle.new simple_page, :public_dir => FIXTURES_PATH
     end
 
-    it "leaves externally hosted Javascripts alone" do
+    it "leaves Javascripts that are not locally hosted alone" do
       @bundle.call @env
       @bundle.document.css
     end

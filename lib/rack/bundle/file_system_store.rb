@@ -5,6 +5,7 @@ class Rack::Bundle::FileSystemStore
   
   def initialize dir = Dir.tmpdir
     @dir = dir
+    clear_existing_bundles
   end
   
   def find_bundle_by_hash hash
@@ -22,5 +23,10 @@ class Rack::Bundle::FileSystemStore
     File.open("#{dir}/rack-bundle-#{bundle.hash}.#{bundle.extension}", 'w') do |file|
       file << bundle.contents
     end    
-  end    
+  end
+  
+  private
+  def clear_existing_bundles
+    Dir["#{dir}/rack-bundle-*"].each do |file| FileUtils.rm_f(file) end
+  end
 end

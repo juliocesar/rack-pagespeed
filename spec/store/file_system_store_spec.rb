@@ -19,6 +19,12 @@ describe Rack::Bundle::FileSystemStore do
   it "finds a bundle by it's hash on #find_bundle_by_hash" do
     @storage.find_bundle_by_hash(@jsbundle.hash).should be_an_instance_of Rack::Bundle::JSBundle
   end
+  
+  it "clears existing bundles when initializing" do
+    FileUtils.touch FIXTURES_PATH + '/rack-bundle-1234567890.js'
+    Rack::Bundle::FileSystemStore.new FIXTURES_PATH
+    File.exists?(FIXTURES_PATH + '/rack-bundle-1234567890.js').should be_false
+  end
     
   context 'storing bundles in the file system' do
     it "checks if a bundle exists with #has_bundle?" do
