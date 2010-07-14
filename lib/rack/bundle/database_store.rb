@@ -11,8 +11,8 @@ class Rack::Bundle::DatabaseStore
   def find_bundle_by_hash hash
     return nil unless result = @db[:rack_bundle].where(:hash => hash).first
     result[:type] == 'js' ? 
-      Rack::Bundle::JSBundle.new(result[:contents]) :
-      Rack::Bundle::CSSBundle.new(result[:contents])
+      Rack::Bundle::JSBundle.new_from_contents(result[:contents]) :
+      Rack::Bundle::CSSBundle.new_from_contents(result[:contents])
   end
   
   def add bundle

@@ -11,7 +11,7 @@ class Rack::Bundle::FileSystemStore
     found = Dir["#{dir}/rack-bundle-#{hash}.*"]
     return nil unless found.any?
     type, contents = File.extname(found.first).sub(/^./, ''), File.read(File.join(dir, File.basename(found.first)))
-    type == 'js' ? Rack::Bundle::JSBundle.new(contents) : Rack::Bundle::CSSBundle.new(contents)
+    type == 'js' ? Rack::Bundle::JSBundle.new_from_contents(contents) : Rack::Bundle::CSSBundle.new_from_contents(contents)
   end
     
   def has_bundle? bundle

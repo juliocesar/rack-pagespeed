@@ -1,6 +1,14 @@
 require 'rack'
 require 'nokogiri'
 
+class File
+  def contents
+    _contents = read
+    rewind
+    _contents
+  end
+end
+
 module Rack
   class Bundle
     SELECTORS = Struct.new('Selector', :js, :css).new(
@@ -10,8 +18,8 @@ module Rack
     attr_accessor :storage, :document, :public_dir
     autoload :FileSystemStore,  'rack/bundle/file_system_store'
     autoload :DatabaseStore,    'rack/bundle/database_store'
-    autoload :JSBundle,         'rack/bundle/js_bundle'
-    autoload :CSSBundle,        'rack/bundle/css_bundle'
+    autoload :JSBundle,         'rack/bundle/bundles/js'
+    autoload :CSSBundle,        'rack/bundle/bundles/css'
 
     def initialize app, options = {}
       @app, @public_dir = app, options[:public_dir]

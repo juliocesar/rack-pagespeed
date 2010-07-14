@@ -23,7 +23,7 @@ describe Rack::Bundle::DatabaseStore do
     it 'takes a bundle hash as argument and returns a matching bundle' do
       jsbundle = Rack::Bundle::JSBundle.new fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
       @db_store.db[:rack_bundle].insert(:hash => jsbundle.hash, :contents => jsbundle.contents, :type => 'js')
-      @db_store.find_bundle_by_hash(jsbundle.hash).should == jsbundle
+      @db_store.find_bundle_by_hash(jsbundle.hash).should be_an_instance_of Rack::Bundle::JSBundle
     end    
     it "returns nil when a bundle can't be found with a matching hash" do
       @db_store.find_bundle_by_hash('non existant').should be_nil

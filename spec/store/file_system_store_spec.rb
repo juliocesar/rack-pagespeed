@@ -17,7 +17,7 @@ describe Rack::Bundle::FileSystemStore do
   end
   
   it "finds a bundle by it's hash on #find_bundle_by_hash" do
-    @storage.find_bundle_by_hash(@jsbundle.hash).should == @jsbundle
+    @storage.find_bundle_by_hash(@jsbundle.hash).should be_an_instance_of Rack::Bundle::JSBundle
   end
     
   context 'storing bundles in the file system' do
