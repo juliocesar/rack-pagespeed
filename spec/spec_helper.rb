@@ -19,7 +19,7 @@ def make_js_bundle
 end
 
 def make_css_bundle
-  @bundle = Rack::Bundle::CSSBundle.new $reset, $screen
+  Rack::Bundle::CSSBundle.new $reset, $screen
 end
 
 def filename file
@@ -27,11 +27,11 @@ def filename file
 end
 
 def index_page
-  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('index.html')]] }
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('index.html').contents]] }
 end
 
 def simple_page
-  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('simple.html')]] }
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('simple.html').contents]] }
 end
 
 def plain_text

@@ -45,7 +45,6 @@ module Rack
     end
 
     def parse!
-      # http://github.com/logicaltext/rack-bundle/commit/8e7d0282b05b01a0cbfa59b519242046437605f6
       body = ""
       @response.each do |part| body << part end
       @document = Nokogiri::HTML(body)
@@ -57,7 +56,7 @@ module Rack
       @storage.add bundle unless @storage.has_bundle? bundle
       bundle_node = @document.create_element 'script',
         :type     => 'text/javascript',
-        :src      => bundle_path(bundle),
+        :src      => bundle.path,
         :charset  => 'utf-8'
       @document.css(SELECTORS.js).first.before(bundle_node)
       @document.css(SELECTORS.js).slice(1..-1).remove
@@ -69,13 +68,13 @@ module Rack
       styles = local_css_nodes.group_by { |node| node.attribute('media').value rescue nil }
       styles.each do |media, nodes|
         next unless nodes.count > 1
-        stylesheets = stylesheet_contents_for nodes
+        stylesheets = stylesheets_for nodes
         bundle = CSSBundle.new *stylesheets
         @storage.add bundle unless @storage.has_bundle? bundle
         node = @document.create_element 'link',
           :rel    => 'stylesheet',
           :type   => 'text/css',
-          :href   => bundle_path(bundle),
+          :href   => bundle.path,
           :media  => media
         nodes.first.before(node)
         nodes.map { |node| node.remove }
@@ -93,23 +92,19 @@ module Rack
     end
 
     def scripts
-      local_javascript_nodes.inject([]) do |contents, node|
+      local_javascript_nodes.inject([]) do |files, node|
         path = ::File.join(@public_dir, node.attribute('src').value)
-        contents << ::File.read(path) if ::File.exists?(path)
-        contents
+        files << ::File.open(path) if ::File.exists?(path)
+        files
       end
     end
 
-    def stylesheet_contents_for nodes
-      nodes.inject([]) do |contents, node|
+    def stylesheets_for nodes
+      nodes.inject([]) do |files, node|
         path = ::File.join(@public_dir, node.attribute('href').value)
-        contents << ::File.read(path) if ::File.exists?(path)
-        contents
+        files << ::File.open(path) if ::File.exists?(path)
+        files
       end
-    end
-
-    def bundle_path bundle
-      "/rack-bundle-#{bundle.hash}.#{bundle.extension}"
     end
 
     def not_found
@@ -117,8 +112,7 @@ module Rack
     end
 
     def respond_with bundle
-      content_type = bundle.is_a?(JSBundle) ? 'text/javascript' : 'text/css'
-      [200, {'Content-Type' => content_type}, [bundle.contents]]
+      [200, {'Content-Type' => bundle.mime_type}, [bundle.contents]]
     end
   end
 end
