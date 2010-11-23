@@ -1,7 +1,8 @@
-source 'http://rubygems.org'
-gem 'nokogiri', '>= 1.4.2'
-gem 'rack',     '>= 1.0.0'
-gem 'sequel',   '>= 3.12.1'
+source :rubygems
+
+gem 'nokogiri', '= 1.4.4'
+gem 'rack',     '= 1.2.1'
+gem 'sequel',   '= 3.17.0'
 group :test do
-  gem 'rspec',    '>= 1.3.0', :require => 'spec'
+  gem 'rspec',    '= 2.1.0'
 end

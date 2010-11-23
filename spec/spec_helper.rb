@@ -1,5 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
-require 'spec'
+require 'rspec'
 require 'fileutils'
 require 'rack/bundle'
 require 'rack/bundle/bundles/base'
@@ -38,7 +38,7 @@ def plain_text
   lambda { |env| [200, { 'Content-Type' => 'text/plain' }, ['plain texto']] }
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   $jquery, $mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
   $reset, $screen = fixture('reset.css'), fixture('screen.css')
   $index          = fixture('index.html')

@@ -75,12 +75,7 @@ describe Rack::Bundle do
     before do
       @simple = Rack::Bundle.new simple_page, :public_dir => FIXTURES_PATH
     end
-
-    it "leaves Javascripts that are not locally hosted alone" do
-      @bundle.call @env
-      @bundle.document.css
-    end
-
+      
     it "skips #replace_javascripts! if there's only one script tag linking a Javascript in" do
       Rack::Bundle::JSBundle.should_not_receive :new
       @simple.call @env

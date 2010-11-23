@@ -1,4 +1,9 @@
-require 'md5'
+begin
+  require 'digest/md5' # 1.9
+  MD5 = Digest::MD5
+rescue LoadError
+  require 'md5' # 1.8
+end
 
 class Rack::Bundle::Base  
   class << self; attr_accessor :extension, :joiner, :mime_type; end
