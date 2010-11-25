@@ -1,8 +1,8 @@
 begin
-  require 'digest/md5' # 1.9
+  require 'digest/md5'
   MD5 = Digest::MD5
 rescue LoadError
-  require 'md5' # 1.8
+  require 'md5'
 end
 
 class Rack::Bundle::Base  
@@ -24,7 +24,7 @@ class Rack::Bundle::Base
   end
   
   def hash
-    @hash ||= MD5.new(@files.map { |file| File.basename(file.path) + File.mtime(file.path).to_s }.join).to_s
+    @hash ||= MD5.hexdigest(@files.map { |file| File.basename(file.path) + File.mtime(file.path).to_s }.join)
   end
   
   def path
