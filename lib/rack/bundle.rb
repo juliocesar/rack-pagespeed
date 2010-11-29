@@ -2,11 +2,7 @@ require 'rack'
 require 'nokogiri'
 
 class File
-  def contents
-    _contents = read
-    rewind
-    _contents
-  end
+  def contents; _contents = read; rewind; _contents; end
 end
 
 module Rack
@@ -39,7 +35,7 @@ module Rack
         replace_javascripts!
         replace_stylesheets!
         body = @document.to_html
-        headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # Not sure how UTF-8 plays into this
+        headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # Not UTF-8 safe
         [status, headers, [body]]
       end
     end

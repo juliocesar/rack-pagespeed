@@ -1,4 +1,4 @@
-gem 'sequel', '3.17.0'; require 'sequel'
+require 'sequel'
 
 class Rack::Bundle::DatabaseStore
   attr_accessor :db, :bundles
