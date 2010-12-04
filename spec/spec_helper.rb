@@ -1,8 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'rspec'
 require 'fileutils'
-require 'rack/bundle'
-require 'rack/bundle/bundles/base'
+require 'rack/pagespeed'
 require 'tmpdir'
 
 include Rack::Utils
@@ -14,36 +13,6 @@ def fixture name
   File.open(File.join(FIXTURES_PATH, name))
 end
 
-def make_js_bundle
-  Rack::Bundle::JSBundle.new $jquery, $mylib
-end
-
-def make_css_bundle
-  Rack::Bundle::CSSBundle.new $reset, $screen
-end
-
-def filename file
-  File.basename file.path
-end
-
-def index_page
-  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('index.html').contents]] }
-end
-
-def simple_page
-  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('simple.html').contents]] }
-end
-
-def plain_text
-  lambda { |env| [200, { 'Content-Type' => 'text/plain' }, ['plain texto']] }
-end
-
-RSpec.configure do |config|
-  $jquery, $mylib = fixture('jquery-1.4.1.min.js'), fixture('mylib.js')
-  $reset, $screen = fixture('reset.css'), fixture('screen.css')
-  $index          = fixture('index.html')
-  $doc            = Nokogiri::HTML($index)
-  config.after(:all) do
-    `rm -f #{FIXTURES_PATH}/rack-bundle*`
-  end
+def page
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('complex.html').contents]] }
 end
