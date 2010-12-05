@@ -6,6 +6,7 @@ module Rack
   class PageSpeed
     attr_reader :filters, :config
     autoload :Config, 'rack/pagespeed/config'
+    autoload :Filter, 'rack/pagespeed/filters/filter'
     
     def initialize app, config
       @app = app
