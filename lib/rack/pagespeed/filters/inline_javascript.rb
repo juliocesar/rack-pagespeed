@@ -1,5 +1,8 @@
 module Rack::PageSpeed::Filters
-  class InlineJavascript < Base
+  class InlineJavaScript < Base
     
+    
+
+
   end
 end
