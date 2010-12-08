@@ -7,7 +7,7 @@ module Rack::PageSpeed::Filters
       return false unless nodes.count > 0
       nodes.each do |node|
         file = file_for node
-        next if file.stat.size > (@options[:minimum_size] or 2048)
+        next if file.stat.size > (@options[:max_size] or 2048)
         inline = Nokogiri::XML::Node.new 'script', @document
         inline.content = file.read
         node.before inline
