@@ -15,9 +15,9 @@ describe 'the inline_javascript filter' do
       @inliner.document.at_css('script:not([src])').content.should == fixture('mylib.js')
     end
 
-    it 'takes a size threshold parameter via :max_size' do
+    it 'maximum size threshold is controlled via :max_size' do
       inliner = Rack::PageSpeed::Filters::InlineJavaScript.new FIXTURES.complex, 
-        :max_size => 999999,
+        :max_size => 999999, # huge
         :public => FIXTURES_PATH
       inliner.execute!
       inliner.document.css('script:not([src])').count.should == 2
