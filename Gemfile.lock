@@ -3,9 +3,6 @@ GEM
   specs:
     diff-lcs (1.1.2)
     nokogiri (1.4.4)
-    nokogiri-manipulator (0.1.0)
-      nokogiri (= 1.4.4)
-      nokogiri (= 1.4.4)
     rack (1.2.1)
     rspec (2.1.0)
       rspec-core (~> 2.1.0)
@@ -23,7 +20,6 @@ PLATFORMS
 
 DEPENDENCIES
   nokogiri (= 1.4.4)
-  nokogiri-manipulator
   rack (= 1.2.1)
   rspec (= 2.1.0)
   sequel (= 3.17.0)

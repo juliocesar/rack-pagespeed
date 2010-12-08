@@ -1,6 +1,5 @@
 require 'rack'
 require 'nokogiri'
-require 'nokogiri/manipulator'
 
 module Rack
   class PageSpeed
