@@ -10,14 +10,10 @@ class Rack::PageSpeed::Config
   end
   
   def enable_filters_from_options
-    return nil if not @options[:filters]
+    return nil unless @options[:filters]
     case @options[:filters]
-    when Array
-      @options[:filters].map { |filter| self.send filter }
-    when Hash
-      @options[:filters].each do |filter, options|
-        self.send filter, options
-      end
+      when Array  then @options[:filters].map { |filter| self.send filter }
+      when Hash   then @options[:filters].each { |filter, options| self.send filter, options }
     end
   end
   
