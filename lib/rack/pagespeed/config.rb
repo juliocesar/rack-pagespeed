@@ -3,12 +3,18 @@ class Rack::PageSpeed::Config
   
   attr_reader :filters
   
-  def initialize options
+  def initialize options = {}, &block
     @filters, @options = [], options
     filters_to_methods
     enable_filters_from_options
+    instance_eval &block if block_given?
   end
   
+  def method_missing filter
+    raise NoSuchFilterError, "No such filter #{filter}! Available filters: #{(Rack::PageSpeed::Filters.constants - ['Base']).join(', ')}"
+  end
+  
+  private
   def enable_filters_from_options
     return nil unless @options[:filters]
     case @options[:filters]
@@ -17,7 +23,6 @@ class Rack::PageSpeed::Config
     end
   end
   
-  private
   def filters_to_methods
     (Rack::PageSpeed::Filters.constants - ['Base']).each do |filter|
       klass = Rack::PageSpeed::Filters.const_get(filter)
