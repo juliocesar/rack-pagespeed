@@ -4,7 +4,8 @@ class Rack::PageSpeed::Config
   attr_reader :filters
   
   def initialize options = {}, &block
-    @filters, @options = [], options
+    @filters, @options, @public = [], options, options[:public]
+    raise ArgumentError, ":public needs to be a directory" unless File.directory? @public.to_s
     filters_to_methods
     enable_filters_from_options
     instance_eval &block if block_given?

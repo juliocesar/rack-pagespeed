@@ -22,3 +22,10 @@ begin
 rescue LoadError
   puts 'Jeweler not available. gemspec tasks OFF.'
 end
+
+namespace :spec do
+  desc "Runs specs on Ruby 1.8.7 and 1.9.2"
+  task :rubies do
+    system "rvm 1.8.7-p174,1.9.2 specs"
+  end
+end

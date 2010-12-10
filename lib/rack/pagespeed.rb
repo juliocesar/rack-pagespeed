@@ -5,13 +5,12 @@ module Rack
   class PageSpeed
     module Filters; load "#{::File.dirname(__FILE__)}/pagespeed/filters/all.rb"; end
     
-    attr_reader :filters, :config
+    attr_reader :config
     autoload :Config, 'rack/pagespeed/config'
     
-    def initialize app, config, &block
+    def initialize app, options, &block
       @app = app
-      @config = Config.new(config)
-      @config.instance_eval &block if block_given?
+      @config = Config.new options, &block
     end    
   end
 end
