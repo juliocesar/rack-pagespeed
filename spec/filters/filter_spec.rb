@@ -2,18 +2,33 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'the base filter class' do
   before  { @base = Rack::PageSpeed::Filters::Base.new(FIXTURES.complex, :foo => 'bar') }
-  subject { @base }
   
-  it 'takes a Nokogiri HTML document as a paramater' do
-    subject.document.should == FIXTURES.complex
+  context 'the #method declaration, which can be used to declare a method name which the filter can be called upon' do
+    it 'can be called from inside the class' do
+      class Boo < Rack::PageSpeed::Filters::Base
+        method 'mooers'
+      end
+      Boo.method.should == 'mooers'
+    end
+    
+    it 'defaults to the class name if not called' do
+      class BananaSmoothie < Rack::PageSpeed::Filters::Base; end
+      BananaSmoothie.method.should == 'banana_smoothie'      
+    end
   end
+    
+  context 'when instancing' do  
+    it 'takes a Nokogiri HTML document as a paramater' do
+      @base.document.should == FIXTURES.complex
+    end
   
-  it 'takes an options hash as a second argument' do
-    subject.options[:foo].should == 'bar'
-  end
+    it 'takes an options hash as a second argument' do
+      @base.options[:foo].should == 'bar'
+    end
   
-  it 'errors out if no argument is passed to the initializer' do
-    expect { Rack::PageSpeed::Filters::Base.new }.to raise_error    
+    it 'errors out if no argument is passed to the initializer' do
+      expect { Rack::PageSpeed::Filters::Base.new }.to raise_error    
+    end
   end
   
   context '#file_for returns a File object' do

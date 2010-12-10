@@ -8,10 +8,10 @@ module Rack
     attr_reader :filters, :config
     autoload :Config, 'rack/pagespeed/config'
     
-    def initialize app, config
+    def initialize app, config, &block
       @app = app
       @config = Config.new(config)
-      yield @config if block_given?
+      @config.instance_eval &block if block_given?
     end    
   end
 end

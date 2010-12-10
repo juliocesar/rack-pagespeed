@@ -1,9 +1,9 @@
 module Rack::PageSpeed::Filters
   class InlineJavaScript < Base
-    SELECTOR = 'script[src$=".js"]:not([src^="http"])'    
-    
+    method 'inline_javascript'
+        
     def execute!
-      nodes = @document.css(SELECTOR)
+      nodes = @document.css('script[src$=".js"]:not([src^="http"])')
       return false unless nodes.count > 0
       nodes.each do |node|
         file = file_for node
