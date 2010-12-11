@@ -1,7 +1,7 @@
 class Rack::PageSpeed::Config
   class NoSuchFilterError < RuntimeError; end
 
-  attr_reader :filters
+  attr_reader :filters, :options
 
   def initialize options = {}, &block
     @filters, @options, @public = [], options, options[:public]
@@ -12,7 +12,7 @@ class Rack::PageSpeed::Config
   end
 
   def method_missing filter
-    raise NoSuchFilterError, "No such filter #{filter}! Available filters: #{(Rack::PageSpeed::Filters.constants - ['Base']).join(', ')}"
+    raise NoSuchFilterError, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filters::Base.available_filters).join(', ')}"
   end
 
   private
@@ -25,8 +25,7 @@ class Rack::PageSpeed::Config
   end
 
   def filters_to_methods
-    (Rack::PageSpeed::Filters.constants - ['Base']).each do |filter|
-      klass = Rack::PageSpeed::Filters.const_get(filter)
+    Rack::PageSpeed::Filters::Base.available_filters.each do |klass|
       (class << self; self; end).send :define_method, klass.method do |*options|
         @filters << klass.new(options.any? ? @options.merge(*options) : @options)
       end

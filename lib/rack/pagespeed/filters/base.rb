@@ -1,11 +1,21 @@
 module Rack::PageSpeed::Filters
   class Base
     attr_reader :document, :options
+    @@subclasses = []
+
     def initialize options = {}
       @options = options
     end
 
     class << self
+      def inherited klass
+        @@subclasses << klass
+      end
+
+      def available_filters
+        @@subclasses
+      end
+
       def method name = nil
         name ? @method = name : @method ||= underscore(to_s)
       end

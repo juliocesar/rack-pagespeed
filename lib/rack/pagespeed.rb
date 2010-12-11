@@ -18,6 +18,12 @@ module Rack
       return [status, headers, @response] unless headers['Content-Type'] =~ /html/
       body = ""; @response.each do |part| body << part end
       @document = Nokogiri::HTML(body)
+      @config.filters.each do |filter|
+        filter.execute! @document
+      end
+      body = @document.to_html
+      headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # still UTF-8 unsafe
+      [status, headers, [body]]
     end
   end
 end

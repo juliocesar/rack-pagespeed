@@ -6,6 +6,11 @@ describe 'the base filter class' do
   it 'when instancing, it optionally takes an options hash as argument' do
     @base.options[:foo].should == 'bar'
   end
+  
+  it 'when subclassing, it adds the new class to the #available_filters list' do
+    class Moo < Rack::PageSpeed::Filters::Base; end
+    Rack::PageSpeed::Filters::Base.available_filters.should include(Moo)
+  end
 
   context 'the #method declaration, which can be used to declare a method name which the filter can be called upon' do
     it 'can be called from inside the class' do
