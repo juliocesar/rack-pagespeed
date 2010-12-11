@@ -12,7 +12,11 @@ def fixture name
 end
 
 def page
-  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('complex.html').contents]] }
+  lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('complex.html')]] }
+end
+
+def plain_text
+  lambda { |env| [200, { 'Content-Type' => 'text/plain' }, ['plain texto']] }
 end
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')

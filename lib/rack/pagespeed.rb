@@ -17,8 +17,7 @@ module Rack
       status, headers, @response = @app.call(env)
       return [status, headers, @response] unless headers['Content-Type'] =~ /html/
       body = ""; @response.each do |part| body << part end
-      @document = Nokogiri::HTML(body)
-      
+      @document = Nokogiri::HTML(body)      
     end
   end
 end
