@@ -1,8 +1,8 @@
 module Rack::PageSpeed::Filters
   class Base
     attr_reader :document, :options
-    def initialize document, options = {}
-      @document, @options = document, options
+    def initialize options = {}
+      @options = options
     end
 
     class << self

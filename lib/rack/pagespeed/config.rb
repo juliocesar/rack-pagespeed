@@ -28,7 +28,7 @@ class Rack::PageSpeed::Config
     (Rack::PageSpeed::Filters.constants - ['Base']).each do |filter|
       klass = Rack::PageSpeed::Filters.const_get(filter)
       (class << self; self; end).send :define_method, klass.method do |*options|
-        @filters << klass.new(@document, options.any? ? @options.merge(*options) : @options)
+        @filters << klass.new(options.any? ? @options.merge(*options) : @options)
       end
     end
   end

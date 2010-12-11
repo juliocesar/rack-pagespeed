@@ -24,3 +24,12 @@ FIXTURES = Struct.new('HTML', :complex, :noscripts).new(
   Nokogiri::HTML(fixture('complex.html')),
   Nokogiri::HTML(fixture('noscripts.html'))
 )
+
+RSpec.configure do |config|
+  # Restore fixtures' original state
+  config.before :each do
+    FIXTURES.complex = Nokogiri::HTML(fixture('complex.html'))
+    FIXTURES.noscripts = Nokogiri::HTML(fixture('noscripts.html'))
+  end
+end
+
