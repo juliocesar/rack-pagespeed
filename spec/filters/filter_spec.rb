@@ -12,17 +12,17 @@ describe 'the base filter class' do
     Rack::PageSpeed::Filters::Base.available_filters.should include(Moo)
   end
 
-  context 'the #method declaration, which can be used to declare a method name which the filter can be called upon' do
+  context 'the #name declaration, which can be used to declare a name which the filter can be called upon' do
     it 'can be called from inside the class' do
       class Boo < Rack::PageSpeed::Filters::Base
-        method 'mooers'
+        name 'mooers'
       end
-      Boo.method.should == 'mooers'
+      Boo.name.should == 'mooers'
     end
 
     it 'defaults to the class name if not called' do
       class BananaSmoothie < Rack::PageSpeed::Filters::Base; end
-      BananaSmoothie.method.should == 'banana_smoothie'
+      BananaSmoothie.name.should == 'banana_smoothie'
     end
   end
 

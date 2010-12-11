@@ -1,5 +1,5 @@
 class Rack::PageSpeed::Filters::InlineJavaScript < Rack::PageSpeed::Filters::Base
-  method 'inline_javascript'
+  name 'inline_javascript'
       
   def execute! document
     nodes = document.css('script[src$=".js"]:not([src^="http"])')

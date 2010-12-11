@@ -16,8 +16,8 @@ module Rack::PageSpeed::Filters
         @@subclasses
       end
 
-      def method name = nil
-        name ? @method = name : @method ||= underscore(to_s)
+      def name _name = nil
+        _name ? @name = _name : @name ||= underscore(to_s)
       end
 
       private

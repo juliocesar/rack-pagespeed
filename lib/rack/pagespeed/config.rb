@@ -26,7 +26,7 @@ class Rack::PageSpeed::Config
 
   def filters_to_methods
     Rack::PageSpeed::Filters::Base.available_filters.each do |klass|
-      (class << self; self; end).send :define_method, klass.method do |*options|
+      (class << self; self; end).send :define_method, klass.name do |*options|
         @filters << klass.new(options.any? ? @options.merge(*options) : @options)
       end
     end
