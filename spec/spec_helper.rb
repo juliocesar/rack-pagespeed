@@ -20,9 +20,11 @@ def plain_text
 end
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
-FIXTURES = Struct.new('HTML', :complex, :noscripts).new(
+FIXTURES = Struct.new('HTML', :complex, :noscripts, :noexternalcss, :styles).new(
   Nokogiri::HTML(fixture('complex.html')),
-  Nokogiri::HTML(fixture('noscripts.html'))
+  Nokogiri::HTML(fixture('noscripts.html')),
+  Nokogiri::HTML(fixture('noexternalcss.html')),
+  Nokogiri::HTML(fixture('styles.html'))
 )
 
 RSpec.configure do |config|
@@ -30,6 +32,8 @@ RSpec.configure do |config|
   config.before :each do
     FIXTURES.complex = Nokogiri::HTML(fixture('complex.html'))
     FIXTURES.noscripts = Nokogiri::HTML(fixture('noscripts.html'))
+    FIXTURES.noexternalcss = Nokogiri::HTML(fixture('noexternalcss.html'))
+    FIXTURES.styles = Nokogiri::HTML(fixture('styles.html'))
   end
 end
 
