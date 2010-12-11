@@ -4,12 +4,12 @@ module Rack::PageSpeed::Filters
     def initialize document, options = {}
       @document, @options = document, options
     end
-    
+
     class << self
       def method name = nil
         name ? @method = name : @method ||= underscore(to_s)
       end
-      
+
       private
       def underscore word
         word.split('::').last.
@@ -17,9 +17,9 @@ module Rack::PageSpeed::Filters
         gsub(/([a-z\d])([A-Z])/,'\1_\2').
         tr("-", "_").
         downcase
-      end  
-    end    
-    
+      end
+    end
+
     private
     def file_for node
       case node.name

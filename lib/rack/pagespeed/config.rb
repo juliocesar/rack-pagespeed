@@ -1,8 +1,8 @@
 class Rack::PageSpeed::Config
   class NoSuchFilterError < RuntimeError; end
-  
+
   attr_reader :filters
-  
+
   def initialize options = {}, &block
     @filters, @options, @public = [], options, options[:public]
     raise ArgumentError, ":public needs to be a directory" unless File.directory? @public.to_s
@@ -10,11 +10,11 @@ class Rack::PageSpeed::Config
     enable_filters_from_options
     instance_eval &block if block_given?
   end
-  
+
   def method_missing filter
     raise NoSuchFilterError, "No such filter #{filter}! Available filters: #{(Rack::PageSpeed::Filters.constants - ['Base']).join(', ')}"
   end
-  
+
   private
   def enable_filters_from_options
     return nil unless @options[:filters]
@@ -23,7 +23,7 @@ class Rack::PageSpeed::Config
       when Hash   then @options[:filters].each { |filter, options| self.send filter, options }
     end
   end
-  
+
   def filters_to_methods
     (Rack::PageSpeed::Filters.constants - ['Base']).each do |filter|
       klass = Rack::PageSpeed::Filters.const_get(filter)
