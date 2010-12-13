@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'the inline_javascript filter' do
+  it "is called \"inline_javascript\" as far as Config is concerned" do
+    Rack::PageSpeed::Filters::InlineJavaScript.name.should == 'inline_javascript'
+  end
+  
   context "#execute!" do
     before :each do
       @inliner = Rack::PageSpeed::Filters::InlineJavaScript.new :public => FIXTURES_PATH

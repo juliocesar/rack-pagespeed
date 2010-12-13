@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'the inline_css filter' do
+  it "is called \"inline_css\" as far as Config is concerned" do
+    Rack::PageSpeed::Filters::InlineCSS.name.should == 'inline_css'
+  end
+  
   context "#execute!" do
     before :each do
       @filter = Rack::PageSpeed::Filters::InlineCSS.new :public => FIXTURES_PATH
