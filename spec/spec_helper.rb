@@ -19,6 +19,14 @@ def plain_text
   lambda { |env| [200, { 'Content-Type' => 'text/plain' }, ['plain texto']] }
 end
 
+def mock_store
+  Class.new do
+    def initialize; @db = {}; end
+    def [] key; @db[key]; end
+    def []= key, value; @db[key] = value; end
+  end.new
+end
+
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 FIXTURES = Struct.new('HTML', :complex, :noscripts, :noexternalcss, :styles).new(
   Nokogiri::HTML(fixture('complex.html')),
