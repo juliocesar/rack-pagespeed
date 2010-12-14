@@ -32,12 +32,8 @@ module Rack::PageSpeed::Filters
 
     private
     def file_for node
-      case node.name
-      when 'script'
-        ::File.open ::File.join(options[:public], node['src'])
-      when 'link'
-        ::File.open ::File.join(options[:public], node['href'])
-      end
+      path = ::File.join(options[:public], node[node.name == 'script' ? 'src' : 'href'])
+      ::File.open path if ::File.exists? path
     end
   end
 end

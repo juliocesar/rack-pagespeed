@@ -3,8 +3,7 @@ require 'nokogiri'
 
 module Rack
   class PageSpeed
-    attr_reader :config
-    
+    attr_reader :config    
     load "#{::File.dirname(__FILE__)}/pagespeed/filters/all.rb"
     autoload :Config, 'rack/pagespeed/config'
 
