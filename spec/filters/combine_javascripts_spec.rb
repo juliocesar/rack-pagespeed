@@ -1,6 +1,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'the combine_javascripts filter' do
+  it "is called \"combine_javascripts\" as far as Config is concerned" do
+    Rack::PageSpeed::Filters::CombineJavaScripts.name.should == 'combine_javascripts'
+  end
+
+  context 'execute!' do
+    before :each do
+      @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH
+      @document = FIXTURES.complex
+    end
+    
+    it 'cuts down the number of scripts in the fixtures from 4 to 2' do
+      @filter.execute! @document
+      @document.css('script[src$=".js"]:not([src^="http"])').count.should == 2
+    end
+  end
+
   context 'yes, I test private methods, so what?' do
     before do
       @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH
