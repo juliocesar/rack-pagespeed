@@ -83,7 +83,7 @@ describe 'rack-pagespeed' do
         @headers['Content-Type'].should == 'application/javascript'
       end
     
-      it "responds with status 200 for assets that are found" do
+      it "responds with HTTP 200" do
         @status.should == 200
       end
     end
@@ -91,7 +91,7 @@ describe 'rack-pagespeed' do
   
   context "for assets that can't be found in store" do
     before do
-      @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-nonexistent.js'
+      @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-nonexistent.css'
     end
     
     it "responds with HTTP 404" do

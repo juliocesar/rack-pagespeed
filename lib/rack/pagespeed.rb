@@ -35,7 +35,7 @@ module Rack
       if asset = store[asset_id]
         [
           200,
-          { 'Content-Type' => (MIME::Types.type_for(asset_id).first.content_type rescue 'application/octet-stream') },
+          { 'Content-Type' => (MIME::Types.type_for(asset_id).first.content_type rescue 'text/plain') },
           [asset]
         ]
       else
