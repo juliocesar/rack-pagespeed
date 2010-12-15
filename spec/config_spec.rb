@@ -41,13 +41,30 @@ describe 'rack-pagespeed configuration' do
   context 'enabling filters, block/DSL based' do
     before { File.stub(:directory?).and_return(true) }
 
-    it "let's you invoke filter names in a DSL-like way through the initializer" do
+    it "let's you invoke filter names in a DSL-like fashion through a block" do
       config = Rack::PageSpeed::Config.new do
-        makes_it_look_good :seriously => true
+        makes_it_look_good
         strips_naked
       end
       config.filters.first.should be_a MakesItLookGood
       config.filters.last.should be_a StripsNaked
+    end
+    
+    # two specs below actually work with the optiosn hash based context too
+    it "won't add the same filter twice" do
+      config = Rack::PageSpeed::Config.new do
+        makes_it_look_good
+        makes_it_look_good
+      end
+      config.filters.count.should == 1
+    end
+    
+    it "won't add a filter if it's call returns false" do
+      class NeedsStore < Rack::PageSpeed::Filters::Base
+        requires_store
+      end
+      config = Rack::PageSpeed::Config.new do needs_store end
+      config.filters.should be_empty
     end
   end
 end

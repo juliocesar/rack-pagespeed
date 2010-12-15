@@ -5,15 +5,13 @@ describe 'the combine_javascripts filter' do
     Rack::PageSpeed::Filters::CombineJavaScripts.name.should == 'combine_javascripts'
   end
   
-  context 'initializing' do
-    it "requires a store mechanism to be passed via :store" do
-      expect { Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH }.to raise_error(ArgumentError)
-    end
+  it "requires a store mechanism to be passed via :store when initializing" do
+    Rack::PageSpeed::Filters::CombineJavaScripts.new.should be_false
   end
 
   context 'execute!' do
     before :each do
-      @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH, :store => mock_store
+      @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH, :store => {}
     end
     
     it 'cuts down the number of scripts in the fixtures from 4 to 2' do
@@ -21,14 +19,14 @@ describe 'the combine_javascripts filter' do
     end
     
     it "stores the nodes' contents in the store passed through the initializer" do
-      @filter.instance_variable_get(:@store).should_receive(:[]=).twice
+      @filter.instance_variable_get(:@options)[:store].should_receive(:[]=).twice
       @filter.execute! FIXTURES.complex
     end
   end
 
   context 'yes, I test private methods, so what?' do
     before do
-      @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH, :store => mock_store
+      @filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :public => FIXTURES_PATH, :store => {}
     end
 
     it 'returns an array of arrays containing JS nodes that are next to each other in #group_siblings' do

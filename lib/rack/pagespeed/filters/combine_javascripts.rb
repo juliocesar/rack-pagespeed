@@ -6,19 +6,14 @@ end
 
 class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::Base
   name 'combine_javascripts'
+  requires_store
   
-  def initialize options
-    super
-    raise ArgumentError, ":store needs to be specified" unless @options[:store]
-    @store = options[:store]
-  end
-
   def execute! document
     nodes = document.css('script[src$=".js"]:not([src^="http"]) + script[src$=".js"]:not([src^="http"])')
     return false unless nodes.count > 0
     groups = group_siblings nodes
     groups.each do |group|
-      save_nodes group
+      save group
       merged = merge group, document
       group.first.before merged
       group.map { |node| node.remove }
@@ -26,10 +21,10 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::B
   end
 
   private
-  def save_nodes nodes
+  def save nodes
     contents = nodes.map { |node| file_for(node).read rescue "" }
     nodes_id = unique_id nodes
-    @store["#{nodes_id}.js"] = contents
+    @options[:store]["#{nodes_id}.js"] = contents
   end
   
   def merge nodes, document

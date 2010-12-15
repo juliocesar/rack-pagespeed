@@ -3,6 +3,7 @@ GEM
   specs:
     diff-lcs (1.1.2)
     memcached (1.0.2)
+    mime-types (1.16)
     nokogiri (1.4.4)
     rack (1.2.1)
     rspec (2.1.0)
@@ -19,6 +20,7 @@ PLATFORMS
 
 DEPENDENCIES
   memcached (= 1.0.2)
+  mime-types (= 1.16)
   nokogiri (= 1.4.4)
   rack (= 1.2.1)
   rspec (= 2.1.0)

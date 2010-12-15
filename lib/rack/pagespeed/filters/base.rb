@@ -15,6 +15,12 @@ module Rack::PageSpeed::Filters
       def available_filters
         @@subclasses
       end
+      
+      def requires_store
+        def new options = {} # heh, cool
+          options[:store] ? super : false
+        end
+      end
 
       def name _name = nil
         _name ? @name = _name : @name ||= underscore(to_s)
