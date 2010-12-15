@@ -2,19 +2,19 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'disk storage' do
   before :all do
-    DiskStore = Rack::PageSpeed::DiskStore
-    @store = DiskStore.new
+    Rack::PageSpeed::Config
+    @store = Rack::PageSpeed::Store::Disk.new
   end
   
   context 'initializing' do
     it "sets the path to the value passed to the constructor" do
-      DiskStore.new(FIXTURES_PATH).instance_variable_get(:@path).should == FIXTURES_PATH
+      Rack::PageSpeed::Store::Disk.new(FIXTURES_PATH).instance_variable_get(:@path).should == FIXTURES_PATH
     end
     it "defaults to the system's TMP dir if nothing is passed to the constructor" do
-      DiskStore.new.instance_variable_get(:@path).should == Dir.tmpdir
+      Rack::PageSpeed::Store::Disk.new.instance_variable_get(:@path).should == Dir.tmpdir
     end
     it "raises ArgumentError if the path passed to the constructor is not a directory" do
-      expect { DiskStore.new 'unpossible sir' }.to raise_error(ArgumentError)
+      expect { Rack::PageSpeed::Store::Disk.new 'unpossible sir' }.to raise_error(ArgumentError)
     end
   end
   

@@ -46,7 +46,6 @@ describe 'rack-pagespeed configuration' do
         makes_it_look_good
         strips_naked
       end
-      puts "config.filters: #{config.filters.inspect}"
       config.filters.first.should be_a MakesItLookGood
       config.filters.last.should be_a StripsNaked
     end
@@ -56,8 +55,9 @@ describe 'rack-pagespeed configuration' do
       config = Rack::PageSpeed::Config.new do
         makes_it_look_good
         makes_it_look_good
+        strips_naked
       end
-      config.filters.count.should == 1
+      config.filters.count.should == 2
     end
     
     it "won't add a filter if it's call returns false" do
@@ -66,6 +66,31 @@ describe 'rack-pagespeed configuration' do
       end
       config = Rack::PageSpeed::Config.new do needs_store end
       config.filters.should be_empty
+    end
+  end
+  
+  context 'setting a storage mechanism' do
+    before { File.stub(:directory?).and_return(true) }
+    
+    context 'through the hash options' do
+      it 'sets to disk storage, with a specific path if :disk => "some directory path"' do
+        config = Rack::PageSpeed::Config.new :store => { :disk => FIXTURES_PATH }
+        store = config.options[:store]
+        store.should be_a Rack::PageSpeed::Store::Disk
+      end
+      it "sets to disk storage, in the system's TMP dir if :disk"
+      it 'sets to memcache storage if :memcache => "server address/port"'
+      it 'sets to memcache storage, localhost:11211 if :memcache"'
+      it "raises NoSuchStorageMechanism for weird stuff"      
+    end
+    
+    context 'through a block passed to the initializer' do
+      it 'to disk storage, in a specific path if :disk => "some directory path"'
+      it "to disk storage, in the system's TMP dir if :disk"
+      it 'to memcache storage if :memcache => "server address/port"'
+      it 'to memcache storage, localhost:11211 if :memcache"'
+      it "raises UnknownStorage for weird stuff"
+      
     end
   end
 end

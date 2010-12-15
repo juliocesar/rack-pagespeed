@@ -1,6 +1,6 @@
 require 'memcached' # wanted to use Dalli, but it just ain't working here right now
 
-class Rack::PageSpeed::MemcachedStore
+class Rack::PageSpeed::Store::Memcached
   def initialize address_port = nil
     @client = Memcached.new address_port
     @client.stats # let it raise errors if it can't connect
@@ -12,6 +12,6 @@ class Rack::PageSpeed::MemcachedStore
   
   def []= key, value
     @client.set key, value
-    value
+    true
   end
 end

@@ -4,9 +4,6 @@ require 'fileutils'
 require 'rack/pagespeed'
 require 'tmpdir'
 
-include Rack::Utils
-alias :h :escape_html
-
 def fixture name
   File.open(File.join(FIXTURES_PATH, name)).readlines.join
 end
