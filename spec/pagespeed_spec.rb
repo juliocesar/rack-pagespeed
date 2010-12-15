@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'rack-pagespeed' do
   before do
-    @pagespeed = Rack::PageSpeed.new page, :public => FIXTURES_PATH
+    @pagespeed = Rack::PageSpeed.new page, :public => FIXTURES_PATH, :store => {}
     @env = Rack::MockRequest.env_for '/'
   end
 
@@ -67,6 +67,35 @@ describe 'rack-pagespeed' do
     end
   end
 
-  context 'serving stored assets' do
+  context 'responding to /rack-pagespeed-* requests' do
+    context 'for assets that it finds in store' do
+      before do
+        store = @pagespeed.config.options[:store]
+        store['12345.js'] = 'Little poney'
+        @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-12345.js'
+      end
+
+      it "responds with the contents in store that match the asset unique id" do
+        @response.to_s.should == 'Little poney'
+      end
+    
+      it "responds with the appropriate MIME type for the asset stored" do
+        @headers['Content-Type'].should == 'application/javascript'
+      end
+    
+      it "responds with status 200 for assets that are found" do
+        @status.should == 200
+      end
+    end
+  end
+  
+  context "for assets that can't be found in store" do
+    before do
+      @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-nonexistent.js'
+    end
+    
+    it "responds with HTTP 404" do
+      @status.should == 404
+    end
   end
 end
