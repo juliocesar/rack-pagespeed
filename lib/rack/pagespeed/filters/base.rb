@@ -17,8 +17,10 @@ module Rack::PageSpeed::Filters
       end
       
       def requires_store
-        def new options = {} # heh, cool
-          options[:store] ? super : false
+        instance_eval do
+          def new options = {}
+            options[:store] ? super(options) : false
+          end
         end
       end
 

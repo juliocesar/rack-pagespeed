@@ -28,6 +28,7 @@ class Rack::PageSpeed::Config
     Rack::PageSpeed::Filters::Base.available_filters.each do |klass|
       (class << self; self; end).send :define_method, klass.name do |*options|
         instance = klass.new(options.any? ? @options.merge(*options) : @options)
+        puts "GOT: #{instance.inspect}"
         @filters << instance if instance and !@filters.select { |k| k.is_a? instance.class }.any?
       end
     end

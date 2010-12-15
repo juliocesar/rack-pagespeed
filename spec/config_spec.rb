@@ -46,6 +46,7 @@ describe 'rack-pagespeed configuration' do
         makes_it_look_good
         strips_naked
       end
+      puts "config.filters: #{config.filters.inspect}"
       config.filters.first.should be_a MakesItLookGood
       config.filters.last.should be_a StripsNaked
     end
