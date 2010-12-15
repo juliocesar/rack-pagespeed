@@ -1,8 +1,8 @@
 class Rack::PageSpeed::Config
   class NoSuchFilter < StandardError; end
-  class NoSuchStorageMechanism < StandardError; end  
+  class NoSuchStorageMechanism < StandardError; end
   load "#{::File.dirname(__FILE__)}/store/all.rb"
-  
+
   attr_reader :filters, :options
 
   def initialize options = {}, &block
@@ -13,15 +13,17 @@ class Rack::PageSpeed::Config
     enable_store_from_options
     instance_eval &block if block_given?
   end
-  
-  def store type, args = nil
+
+  def store type, *args
     case type
     when :disk
-      @options[:store] = Rack::PageSpeed::Store::Disk.new args
+      @options[:store] = Rack::PageSpeed::Store::Disk.new *args
     when :memcached
-      @options[:store] = Rack::PageSpeed::Store::Memcached.new args
+      @options[:store] = Rack::PageSpeed::Store::Memcached.new *args
     when {}
       @options[:store] = {} # simple in-memory store
+    when Hash
+      store *type.to_a.first
     else
       raise NoSuchStorageMechanism, "No such storage mechanism: #{type}"
     end
@@ -35,12 +37,13 @@ class Rack::PageSpeed::Config
   def enable_store_from_options
     return false unless @options[:store]
     case @options[:store]
+      when Symbol then store @options[:store]
       when Array then store *@options[:store]
       when Hash
         @options[:store] == {} ? store({}) : store(*@options[:store].to_a.first)
     end
   end
-  
+
   def enable_filters_from_options
     return false unless @options[:filters]
     case @options[:filters]
@@ -56,9 +59,5 @@ class Rack::PageSpeed::Config
         @filters << instance if instance and !@filters.select { |k| k.is_a? instance.class }.any?
       end
     end
-  end
-  
-  def filters_include_a? filters, klass
-    filters.select { |k| k.is_a? klass.class }.any?
   end
 end

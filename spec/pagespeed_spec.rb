@@ -2,8 +2,8 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'rack-pagespeed' do
   before do
-    @pagespeed  = Rack::PageSpeed.new page, :public => FIXTURES_PATH
-    @env        = Rack::MockRequest.env_for '/'
+    @pagespeed = Rack::PageSpeed.new page, :public => FIXTURES_PATH
+    @env = Rack::MockRequest.env_for '/'
   end
 
   context 'parsing the response body' do
@@ -40,14 +40,14 @@ describe 'rack-pagespeed' do
       end
       pagespeed.config.filters.first.should be_a BarFilter
     end
-    
+
     it "passes the constructor's options down to the filters" do
       pagespeed = Rack::PageSpeed.new page, :public => FIXTURES_PATH, :store => {} do
         foo_filter
       end
       pagespeed.config.filters.first.options.should == {:public => FIXTURES_PATH, :store => {}}
     end
-    
+
   end
 
   context 'dispatching filters' do
@@ -64,11 +64,9 @@ describe 'rack-pagespeed' do
     it "calls #execute! on each filter it finds in it's config" do
       @pagespeed.call @env
       $foo.should == ['foo', 'bar']
-    end    
+    end
   end
-  
+
   context 'serving stored assets' do
-        
-    
   end
 end
