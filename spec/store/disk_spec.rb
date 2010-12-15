@@ -5,10 +5,10 @@ describe 'disk storage' do
     Rack::PageSpeed::Config
     @store = Rack::PageSpeed::Store::Disk.new
   end
-  
+
   context 'initializing' do
     it "sets the path to the value passed to the constructor" do
-      Rack::PageSpeed::Store::Disk.new(FIXTURES_PATH).instance_variable_get(:@path).should == FIXTURES_PATH
+      Rack::PageSpeed::Store::Disk.new(Fixtures.path).instance_variable_get(:@path).should == Fixtures.path
     end
     it "defaults to the system's TMP dir if nothing is passed to the constructor" do
       Rack::PageSpeed::Store::Disk.new.instance_variable_get(:@path).should == Dir.tmpdir
@@ -17,14 +17,14 @@ describe 'disk storage' do
       expect { Rack::PageSpeed::Store::Disk.new 'unpossible sir' }.to raise_error(ArgumentError)
     end
   end
-  
+
   context 'writing' do
     it "writes to disk with a Hash-like syntax" do
       @store['omg'] = "value"
       File.read("#{Dir.tmpdir}/rack-pagespeed-omg").should == "value"
     end
   end
-  
+
   context 'reading' do
     it "reads from disk with a Hash-like syntax" do
       File.open("#{Dir.tmpdir}/rack-pagespeed-hola", 'w') { |file| file << "Hola mundo" }

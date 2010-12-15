@@ -74,10 +74,10 @@ describe 'rack-pagespeed configuration' do
 
     context 'through the hash options' do
       context ':disk => "directory path" sets to disk storage, with a specific path' do
-        before  { @config = Rack::PageSpeed::Config.new :store => { :disk => FIXTURES_PATH } }
+        before  { @config = Rack::PageSpeed::Config.new :store => { :disk => Fixtures.path } }
         subject { @config.options[:store] }
         specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == FIXTURES_PATH }
+        specify { subject.instance_variable_get(:@path).should == Fixtures.path }
       end
       context ":disk sets to disk storage, in the system's temp dir" do
         before  { @config = Rack::PageSpeed::Config.new :store => :disk }
@@ -106,12 +106,12 @@ describe 'rack-pagespeed configuration' do
       context 'to disk storage, in a specific path if :disk => "some directory path"' do
         before do
           @config = Rack::PageSpeed::Config.new do
-            store :disk => FIXTURES_PATH
+            store :disk => Fixtures.path
           end
         end
         subject { @config.options[:store] }
         specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == FIXTURES_PATH }
+        specify { subject.instance_variable_get(:@path).should == Fixtures.path }
       end
       context ":disk sets to disk storage, in the system's temp dir" do
         before do

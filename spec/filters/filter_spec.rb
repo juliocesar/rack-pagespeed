@@ -27,16 +27,16 @@ describe 'the base filter class' do
   end
 
   context '#file_for returns a File object' do
-    before { @base.options.stub(:[]).with(:public).and_return(FIXTURES_PATH) }
+    before { @base.options.stub(:[]).with(:public).and_return(Fixtures.path) }
 
     it 'for a script' do
-      script = FIXTURES.complex.at_css('#mylib')
-      @base.send(:file_for, script).stat.size.should == File.size(File.join(FIXTURES_PATH, 'mylib.js'))
+      script = Fixtures.complex.at_css('#mylib')
+      @base.send(:file_for, script).stat.size.should == File.size(File.join(Fixtures.path, 'mylib.js'))
     end
 
     it "for a stylesheet" do
-      style = FIXTURES.complex.at_css('link')
-      @base.send(:file_for, style).stat.size.should == File.size(File.join(FIXTURES_PATH, 'reset.css'))
+      style = Fixtures.complex.at_css('link')
+      @base.send(:file_for, style).stat.size.should == File.size(File.join(Fixtures.path, 'reset.css'))
     end
   end
 end
