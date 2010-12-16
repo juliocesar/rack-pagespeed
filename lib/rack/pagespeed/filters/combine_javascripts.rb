@@ -22,7 +22,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::B
 
   private
   def save nodes
-    contents = nodes.map { |node| file_for(node).read rescue "" }
+    contents = nodes.map { |node| file_for(node).read rescue "" }.join(';')
     nodes_id = unique_id nodes
     @options[:store]["#{nodes_id}.js"] = contents
   end
@@ -42,7 +42,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::B
     nodes.inject([]) do |result, node|
       group, current = [], node
       group << node
-      while previous = current.previous_sibling
+      while previous = current.previous_sibling and previous['src']
         break if previous['src'].match(/^http/) # not consistent with the pattern above
         current = previous
         group.unshift current

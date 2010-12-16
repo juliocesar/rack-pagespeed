@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'rack-pagespeed' do
   before do
-    @pagespeed = Rack::PageSpeed.new page, :public => Fixtures.path, :store => {}
+    @pagespeed = Rack::PageSpeed.new Apps.complex, :public => Fixtures.path, :store => {}
     @env = Rack::MockRequest.env_for '/'
   end
 
@@ -12,13 +12,13 @@ describe 'rack-pagespeed' do
     end
 
     it "doesn't happen unless the response is not HTML" do
-      pagespeed = Rack::PageSpeed.new plain_text, :public => Fixtures.path
+      pagespeed = Rack::PageSpeed.new Apps.plain_text, :public => Fixtures.path
       pagespeed.call @env
       pagespeed.instance_variable_get(:@document).should be_nil
     end
 
     it "only happens if the response is HTML" do
-      pagespeed = Rack::PageSpeed.new page, :public => Fixtures.path
+      pagespeed = Rack::PageSpeed.new Apps.complex, :public => Fixtures.path
       pagespeed.call @env
       pagespeed.instance_variable_get(:@document).should_not be_nil
     end
@@ -35,14 +35,14 @@ describe 'rack-pagespeed' do
     end
 
     it "takes a block which gets passed to it's config" do
-      pagespeed = Rack::PageSpeed.new page, :public => Fixtures.path do
+      pagespeed = Rack::PageSpeed.new Apps.complex, :public => Fixtures.path do
         bar_filter
       end
       pagespeed.config.filters.first.should be_a BarFilter
     end
 
     it "passes the constructor's options down to the filters" do
-      pagespeed = Rack::PageSpeed.new page, :public => Fixtures.path, :store => {} do
+      pagespeed = Rack::PageSpeed.new Apps.complex, :public => Fixtures.path, :store => {} do
         foo_filter
       end
       pagespeed.config.filters.first.options.should == {:public => Fixtures.path, :store => {}}
@@ -55,7 +55,7 @@ describe 'rack-pagespeed' do
       $foo = []
       class AddsFoo < Rack::PageSpeed::Filters::Base; def execute! document; $foo << 'foo' end; end
       class AddsBar < Rack::PageSpeed::Filters::Base; def execute! document; $foo << 'bar' end; end
-      @pagespeed = Rack::PageSpeed.new page, :public => Fixtures.path do
+      @pagespeed = Rack::PageSpeed.new Apps.complex, :public => Fixtures.path do
         adds_foo
         adds_bar
       end
