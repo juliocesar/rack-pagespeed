@@ -75,25 +75,25 @@ describe 'rack-pagespeed configuration' do
     context 'through the hash options' do
       context ':disk => "directory path" sets to disk storage, with a specific path' do
         before  { @config = Rack::PageSpeed::Config.new :store => { :disk => Fixtures.path } }
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Disk }
         specify { subject.instance_variable_get(:@path).should == Fixtures.path }
       end
       context ":disk sets to disk storage, in the system's temp dir" do
         before  { @config = Rack::PageSpeed::Config.new :store => :disk }
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Disk }
         specify { subject.instance_variable_get(:@path).should == Dir.tmpdir }
       end
       context 'sets to memcache storage if :memcache => "server address/port"' do
         before  { @config = Rack::PageSpeed::Config.new :store => { :memcached => 'localhost:11211' } }
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Memcached }
         specify { subject.instance_variable_get(:@client).servers.first.should =~ /localhost:11211/ }
       end
       context 'sets to memcache storage, 127.0.0.1:11211 if :memcache"' do
         before  { @config = Rack::PageSpeed::Config.new :store => :memcached }
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Memcached }
         specify { subject.instance_variable_get(:@client).servers.first.should =~ /127.0.0.1:11211/ }
       end
@@ -103,13 +103,22 @@ describe 'rack-pagespeed configuration' do
     end
 
     context 'through a block passed to the initializer' do
+      context 'to a simple Hash, if {} gets passed' do
+        before do
+          @config = Rack::PageSpeed::Config.new do
+            store({})
+          end
+        end
+        subject { @config.store }
+        specify { should == {} }
+      end
       context 'to disk storage, in a specific path if :disk => "some directory path"' do
         before do
           @config = Rack::PageSpeed::Config.new do
             store :disk => Fixtures.path
           end
         end
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Disk }
         specify { subject.instance_variable_get(:@path).should == Fixtures.path }
       end
@@ -119,7 +128,7 @@ describe 'rack-pagespeed configuration' do
             store :disk
           end
         end
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Disk }
         specify { subject.instance_variable_get(:@path).should == Dir.tmpdir }
       end
@@ -129,7 +138,7 @@ describe 'rack-pagespeed configuration' do
             store :memcached => 'localhost:11211'
           end
         end
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Memcached }
         specify { subject.instance_variable_get(:@client).servers.first.should =~ /localhost:11211/ }
       end
@@ -139,7 +148,7 @@ describe 'rack-pagespeed configuration' do
             store :memcached
           end
         end
-        subject { @config.options[:store] }
+        subject { @config.store }
         specify { should be_a Rack::PageSpeed::Store::Memcached }
         specify { subject.instance_variable_get(:@client).servers.first.should =~ /127.0.0.1:11211/ }
       end

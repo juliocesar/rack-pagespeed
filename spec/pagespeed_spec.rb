@@ -31,7 +31,7 @@ describe 'rack-pagespeed' do
     end
 
     it "takes an options hash which gets passed to it's config" do
-      @pagespeed.config.options[:public].should == Fixtures.path
+      @pagespeed.config.public.should == Fixtures.path
     end
 
     it "takes a block which gets passed to it's config" do
@@ -70,7 +70,7 @@ describe 'rack-pagespeed' do
   context 'responding to /rack-pagespeed-* requests' do
     context 'for assets that it finds in store' do
       before do
-        store = @pagespeed.config.options[:store]
+        store = @pagespeed.config.store
         store['12345.js'] = 'Little poney'
         @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-12345.js'
       end

@@ -22,14 +22,12 @@ module Apps
   end
 end
 
-
 Fixtures = OpenStruct.new unless defined?(Fixtures)
 Fixtures.path = File.join(File.dirname(__FILE__), 'fixtures')
 Fixtures.complex = Nokogiri::HTML(fixture('complex.html'))
 Fixtures.noscripts = Nokogiri::HTML(fixture('noscripts.html'))
 Fixtures.noexternalcss = Nokogiri::HTML(fixture('noexternalcss.html'))
 Fixtures.styles = Nokogiri::HTML(fixture('styles.html'))
-
 
 RSpec.configure do |config|
   # Restore fixtures' original state

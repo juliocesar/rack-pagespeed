@@ -31,7 +31,7 @@ module Rack
     end
     
     def respond_with asset_id
-      store = @config.options[:store]
+      store = @config.store
       if asset = store[asset_id]
         [
           200,

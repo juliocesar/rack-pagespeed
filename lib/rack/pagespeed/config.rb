@@ -3,7 +3,7 @@ class Rack::PageSpeed::Config
   class NoSuchStorageMechanism < StandardError; end
   load "#{::File.dirname(__FILE__)}/store/all.rb"
 
-  attr_reader :filters, :options
+  attr_reader :filters, :public
 
   def initialize options = {}, &block
     @filters, @options, @public = [], options, options[:public]
@@ -14,14 +14,15 @@ class Rack::PageSpeed::Config
     instance_eval &block if block_given?
   end
 
-  def store type, *args
+  def store type = nil, *args
+    return @store unless type
     case type
     when :disk
-      @options[:store] = Rack::PageSpeed::Store::Disk.new *args
+      @store = Rack::PageSpeed::Store::Disk.new *args
     when :memcached
-      @options[:store] = Rack::PageSpeed::Store::Memcached.new *args
+      @store = Rack::PageSpeed::Store::Memcached.new *args
     when {}
-      @options[:store] = {} # simple in-memory store
+      @store = {} # simple in-memory store
     when Hash
       store *type.to_a.first
     else
@@ -30,7 +31,7 @@ class Rack::PageSpeed::Config
   end
 
   def method_missing filter
-    raise NoSuchFilterError, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filters::Base.available_filters).join(', ')}"
+    raise NoSuchFilter, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filters::Base.available_filters).join(', ')}"
   end
 
   private
@@ -55,7 +56,8 @@ class Rack::PageSpeed::Config
   def filters_to_methods
     Rack::PageSpeed::Filters::Base.available_filters.each do |klass|
       (class << self; self; end).send :define_method, klass.name do |*options|
-        instance = klass.new(options.any? ? @options.merge(*options) : @options)
+        default_options = {:public => @options[:public], :store => @store}
+        instance = klass.new(options.any? ? default_options.merge(*options) : default_options)
         @filters << instance if instance and !@filters.select { |k| k.is_a? instance.class }.any?
       end
     end

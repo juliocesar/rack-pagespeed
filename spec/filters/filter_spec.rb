@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe 'the base filter class' do
   before  { @base = Rack::PageSpeed::Filters::Base.new(:foo => 'bar') }
   
-  it 'when instancing, it optionally takes an options hash as argument' do
+  it 'when instancing, it takes an options hash as argument' do
     @base.options[:foo].should == 'bar'
   end
   

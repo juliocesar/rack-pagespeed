@@ -1,6 +1,6 @@
 class Rack::PageSpeed::Filters::InlineCSS < Rack::PageSpeed::Filters::Base
   def execute! document
-    nodes = document.css('head link[href$=".css"]:not([href^="http"])')
+    nodes = document.css('link[rel="stylesheet"][href$=".css"]:not([href^="http"])')
     return false unless nodes.count > 0
     nodes.each do |node|
       file = file_for node

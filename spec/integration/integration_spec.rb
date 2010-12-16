@@ -14,6 +14,7 @@ RSpec.configure do |config|
       inline_javascript
       inline_css
       combine_javascripts
+      combine_css
     end
     run lambda { |env| [200, { 'Content-Type' => 'text/html' }, [File.read(File.join(zecoolwebsite, 'index.html')) ] ] }
   end
@@ -26,6 +27,14 @@ feature "playing out in the real world" do
     visit '/'
     page.should have_css('script[src*="rack-pagespeed"]')
     page.should_not have_css('script[src*="jquery"]')
-    page.should_not have_css('script[src*="awesomebydesign"]')
+    page.should_not have_css('script[src*="awesomebydesign"]')    
+    
+    visit page.find('script[src*="rack-pagespeed"]')['src']
+    page.body.should == [fixture('zecoolwebsite/js/jquery-1.4.2.min.js'), fixture('zecoolwebsite/js/awesomebydesign.js')].join(';')
+  end
+  
+  scenario "bundles reset.css and awesomebydesign.css together" do
+    visit '/'
+    page.should have_css('link[rel="stylesheet"][href*="rack-pagespeed"]')
   end
 end
