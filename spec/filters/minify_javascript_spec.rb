@@ -39,6 +39,13 @@ describe 'the minify_javascript filter' do
         @filter.execute! Fixtures.complex
         @store["#{@hash}.js"].should == JSMin.minify(@bundled)
       end
+
+      it "finding a local script, compresses and puts it in storage" do
+        hash = Digest::MD5.hexdigest File.mtime(Fixtures.path + '/jquery-1.4.1.min.js').to_i.to_s + 
+          fixture('jquery-1.4.1.min.js')
+        @filter.execute! Fixtures.complex
+        @filter.options[:store]["#{hash}.js"].should == JSMin.minify(fixture('jquery-1.4.1.min.js'))
+      end
     end
     it 'compresses inline JavaScripts'
   end

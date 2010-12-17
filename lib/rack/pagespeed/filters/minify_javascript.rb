@@ -19,10 +19,11 @@ class Rack::PageSpeed::Filters::MinifyJavaScript < Rack::PageSpeed::Filters::Bas
       else
         file = file_for node
         javascript = file.read
-        unique_id = Digest::MD5.hexdigest javascript
-        inline = Nokogiri::XML::Node.new 'script', document
-        inline.content = JSMin.minify file.read
-        node.before inline
+        hash = Digest::MD5.hexdigest file.mtime.to_i.to_s + javascript
+        compressed = Nokogiri::XML::Node.new 'script', document
+        compressed['src'] = "/rack-pagespeed-#{hash}.js"
+        @options[:store]["#{hash}.js"] = JSMin.minify javascript
+        node.before compressed
         node.remove
       end
     end
