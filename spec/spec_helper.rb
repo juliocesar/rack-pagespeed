@@ -7,7 +7,7 @@ require 'tmpdir'
 require 'ostruct'
 
 def fixture name
-  File.open(File.join(Fixtures.path, name)).readlines.join
+  File.read(File.join(Fixtures.path, name))
 end
 
 module Apps

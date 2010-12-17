@@ -13,13 +13,18 @@ class Rack::PageSpeed::Filters::MinifyJavaScript < Rack::PageSpeed::Filters::Bas
     nodes = document.css('script[src$=".js"]:not([src^="http"])')
     return false unless nodes.count > 0
     nodes.each do |node|
-      file = file_for node
-      javascript = file.read
-      unique_id = Digest::MD5.hexdigest javascript
-      inline = Nokogiri::XML::Node.new 'script', document
-      inline.content = JSMin.minify file.read
-      node.before inline
-      node.remove
+      if match = %r(^/rack-pagespeed-(.*)).match(node['src'])
+        store = @options[:store]
+        store[match[1]] = JSMin.minify store[match[1]]
+      else
+        file = file_for node
+        javascript = file.read
+        unique_id = Digest::MD5.hexdigest javascript
+        inline = Nokogiri::XML::Node.new 'script', document
+        inline.content = JSMin.minify file.read
+        node.before inline
+        node.remove
+      end
     end
   end
 end
