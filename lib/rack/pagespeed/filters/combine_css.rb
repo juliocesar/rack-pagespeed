@@ -21,7 +21,7 @@ class Rack::PageSpeed::Filters::CombineCSS < Rack::PageSpeed::Filters::Base
 
   private
   def merge_contents nodes, separator = ';'
-    nodes.map { |node| file_for(node).read rescue "" }.join(';')
+    nodes.map { |node| file_for(node).read rescue "" }.join("\n")
   end
   
   def save nodes

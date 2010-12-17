@@ -5,8 +5,9 @@ describe 'the combine_javascripts filter' do
     Rack::PageSpeed::Filters::CombineJavaScripts.name.should == 'combine_javascripts'
   end
 
-  it "requires a store mechanism to be passed via :store when initializing" do
-    Rack::PageSpeed::Filters::CombineJavaScripts.new.should be_false
+  context "requires a store mechanism to be passed via :store when initializing" do
+    specify { Rack::PageSpeed::Filters::CombineJavaScripts.new.should be_false }
+    specify { Rack::PageSpeed::Filters::CombineJavaScripts.new(:store => {}).should_not be_false }
   end
 
   context 'execute!' do
@@ -17,7 +18,7 @@ describe 'the combine_javascripts filter' do
     it 'cuts down the number of scripts in the fixtures from 4 to 2' do
       expect { @filter.execute! Fixtures.complex }.to change { Fixtures.complex.css('script[src$=".js"]:not([src^="http"])').count }.from(4).to(2)
     end
-    
+
     it "stores the nodes' contents in the store passed through the initializer" do
       @filter.instance_variable_get(:@options)[:store].should_receive(:[]=).twice
       @filter.execute! Fixtures.complex

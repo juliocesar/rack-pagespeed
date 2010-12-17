@@ -17,6 +17,7 @@ GEM
     diff-lcs (1.1.2)
     ffi (0.6.3)
       rake (>= 0.8.7)
+    jsmin (1.0.1)
     json_pure (1.4.6)
     memcached (1.0.2)
     mime-types (1.16)
@@ -49,6 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (= 0.4.0)
+  jsmin (= 1.0.1)
   memcached (= 1.0.2)
   mime-types (= 1.16)
   nokogiri (= 1.4.4)

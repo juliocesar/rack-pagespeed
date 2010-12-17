@@ -5,6 +5,12 @@ require 'capybara/dsl'
 
 RSpec.configure do |config|
   config.include Capybara
+  config.before :all do
+    `mkdir #{Dir.tmpdir}/pagespeed`
+  end
+  config.after :all do
+    `rm -rf #{Dir.tmpdir}/pagespeed`
+  end
   Capybara.app = Rack::Builder.new do
     zecoolwebsite = File.join(Fixtures.path, 'zecoolwebsite')
     use Rack::Lint
@@ -21,7 +27,10 @@ RSpec.configure do |config|
 end
 
 feature "playing out in the real world" do
-  background { FileUtils.mkdir_p(Dir.tmpdir + '/pagespeed') }
+  scenario "inlines sayhi.js" do
+    visit '/'
+    page.body.should include(fixture('zecoolwebsite/js/sayhi.js'))
+  end
   
   scenario "bundles jquery and awesomebydesign.js together" do
     visit '/'
@@ -36,5 +45,10 @@ feature "playing out in the real world" do
   scenario "bundles reset.css and awesomebydesign.css together" do
     visit '/'
     page.should have_css('link[rel="stylesheet"][href*="rack-pagespeed"]')
+    page.should_not have_css('link[rel="stylesheet"][href*="reset.css"]')
+    page.should_not have_css('link[rel="stylesheet"][href*="awesomebydesign.css"]')    
+    
+    visit page.find('link[rel="stylesheet"][href*="rack-pagespeed"]')['href']
+    page.body.should == [fixture('zecoolwebsite/css/reset.css'), fixture('zecoolwebsite/css/awesomebydesign.css')].join("\n")
   end
 end
