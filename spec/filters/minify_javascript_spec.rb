@@ -33,20 +33,23 @@ describe 'the minify_javascript filter' do
         Fixtures.complex.at_css('script[src*="ohno.js"]').before node
         Fixtures.complex.at_css('script[src*="ohno.js"]').remove
         Fixtures.complex.at_css('script[src*="foo.js"]').remove
+        @filter.execute! Fixtures.complex
       end
 
       it "finding a rack-pagespeed-* reference, it compresses what's in storage" do
-        @filter.execute! Fixtures.complex
         @store["#{@hash}.js"].should == JSMin.minify(@bundled)
       end
 
       it "finding a local script, compresses and puts it in storage" do
-        hash = Digest::MD5.hexdigest File.mtime(Fixtures.path + '/jquery-1.4.1.min.js').to_i.to_s + 
+        hash = Digest::MD5.hexdigest File.mtime(Fixtures.path + '/jquery-1.4.1.min.js').to_i.to_s +
           fixture('jquery-1.4.1.min.js')
-        @filter.execute! Fixtures.complex
         @filter.options[:store]["#{hash}.js"].should == JSMin.minify(fixture('jquery-1.4.1.min.js'))
       end
     end
-    it 'compresses inline JavaScripts'
+    it 'compresses inline JavaScripts' do
+      script = Fixtures.complex.at_css('#alabaster').clone
+      @filter.execute! Fixtures.complex
+      Fixtures.complex.at_css('#alabaster').content.should == JSMin.minify(script.content)
+    end
   end
 end

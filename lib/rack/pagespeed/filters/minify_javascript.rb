@@ -10,22 +10,31 @@ class Rack::PageSpeed::Filters::MinifyJavaScript < Rack::PageSpeed::Filters::Bas
   requires_store
       
   def execute! document
-    nodes = document.css('script[src$=".js"]:not([src^="http"])')
+    nodes = document.css('script')
     return false unless nodes.count > 0
     nodes.each do |node|
-      if match = %r(^/rack-pagespeed-(.*)).match(node['src'])
-        store = @options[:store]
-        store[match[1]] = JSMin.minify store[match[1]]
+      if !node['src']
+        node.content = JSMin.minify node.content
       else
-        file = file_for node
-        javascript = file.read
-        hash = Digest::MD5.hexdigest file.mtime.to_i.to_s + javascript
-        compressed = Nokogiri::XML::Node.new 'script', document
-        compressed['src'] = "/rack-pagespeed-#{hash}.js"
-        @options[:store]["#{hash}.js"] = JSMin.minify javascript
-        node.before compressed
-        node.remove
+        if match = %r(^/rack-pagespeed-(.*)).match(node['src'])
+          store = @options[:store]
+          store[match[1]] = JSMin.minify store[match[1]]
+        else
+          next unless local_script? node
+          file = file_for node
+          javascript = file.read
+          hash = Digest::MD5.hexdigest file.mtime.to_i.to_s + javascript
+          compressed = Nokogiri::XML::Node.new 'script', document
+          compressed['src'] = "/rack-pagespeed-#{hash}.js"
+          @options[:store]["#{hash}.js"] = JSMin.minify javascript
+          node.before compressed
+          node.remove
+        end        
       end
     end
+  end
+  
+  def local_script? node
+    node['src'] and !(node['src'] =~ /^http/ or !(node['src'] =~ /.js$/))
   end
 end
