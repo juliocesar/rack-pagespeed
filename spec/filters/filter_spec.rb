@@ -23,6 +23,27 @@ describe 'the base filter class' do
     it 'defaults to the class name if not called' do
       class BananaSmoothie < Rack::PageSpeed::Filters::Base; end
       BananaSmoothie.name.should == 'banana_smoothie'
+    end      
+  end
+  
+  context 'the #order declaration, which defines the order that the filter will be executed' do
+    it 'takes a number' do
+      class NiceFilter < Rack::PageSpeed::Filter
+        order 1
+      end
+      NiceFilter.order.should == 1
+    end
+    it 'takes a string' do
+      class NiceFilter < Rack::PageSpeed::Filter
+        order '1'
+      end
+      NiceFilter.order.should == 1
+    end    
+    it 'takes a pretty string even' do
+      class PrettyFilter < Rack::PageSpeed::Filter
+        order '1st'
+      end
+      PrettyFilter.order.should == 1
     end
   end
 

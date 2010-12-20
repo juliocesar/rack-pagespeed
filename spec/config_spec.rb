@@ -16,6 +16,31 @@ describe 'rack-pagespeed configuration' do
     end
   end
 
+  context 'sorts filter execution based on their specified order' do
+    before do
+      class Larry < Rack::PageSpeed::Filter; order 1; end
+      class Moe < Rack::PageSpeed::Filter; order 2; end
+      class Curly < Rack::PageSpeed::Filter; order 3; end
+      @config = Rack::PageSpeed::Config.new :public => Fixtures.path do
+        curly
+        larry
+        moe
+      end
+    end
+    
+    it "Larry is first" do
+      @config.filters.first.should be_a Larry
+    end
+        
+    it "Moe is second" do
+      @config.filters[1].should be_a Moe
+    end
+    
+    it "Curly is last" do
+      @config.filters.last.should be_a Curly
+    end
+  end
+
   context 'enabling filters, options hash based' do
     context 'options[:filters]' do
       before { File.stub(:directory?).and_return(true) }

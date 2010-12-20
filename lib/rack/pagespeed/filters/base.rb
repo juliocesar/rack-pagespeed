@@ -27,6 +27,10 @@ module Rack::PageSpeed::Filters
       def name _name = nil
         _name ? @name = _name : @name ||= underscore(to_s)
       end
+      
+      def order _order = nil
+        _order ? @order = _order.to_i : @order || 999
+      end
 
       private
       def underscore word
@@ -44,4 +48,6 @@ module Rack::PageSpeed::Filters
       ::File.open path if ::File.exists? path
     end
   end
+  # shortcut
+  Rack::PageSpeed::Filter = Base
 end

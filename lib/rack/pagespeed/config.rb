@@ -12,6 +12,7 @@ class Rack::PageSpeed::Config
     enable_filters_from_options
     enable_store_from_options
     instance_eval &block if block_given?
+    sort_filters
   end
 
   def store type = nil, *args
@@ -35,6 +36,12 @@ class Rack::PageSpeed::Config
   end
 
   private
+  def sort_filters
+    @filters = @filters.sort_by do |filter|
+      filter.class.order 
+    end
+  end
+  
   def enable_store_from_options
     return false unless @options[:store]
     case @options[:store]
