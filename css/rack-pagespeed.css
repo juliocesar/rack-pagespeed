@@ -25,4 +25,23 @@ a:link            { -webkit-tap-highlight-color: #FF5E99 }
 ::selection { background: #F400BF; color: #FFF; text-shadow: none }
 .ie7 img    { -ms-interpolation-mode: bicubic }
 ul { list-style-type: none; list-style-position: inside }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden }
+.clearfix { display: block; padding: 0 !important }
 /* End reset */
+
+a { cursor: pointer; display: inline-block; padding: 0 0.2em; background: #f9fda2; border-bottom: 1px solid rgba(0, 0, 0, 0.2) }
+body      { background: #c0a987; font-family: "myriad-pro-condensed-1"; font-weight: 400 }
+#wrapper  { width: 1100px; margin: 2em auto; padding: 0.2em; border: 3px #340f07 solid }
+#wrapper > * { padding: 20px }
+header, #intro { float: left; display: inline-block; height: 180px }
+header    { width: 500px; background: #340f07 }
+header h1 { position: relative; font-size: 7em; color: #f0db8a; font-family: "atrament-web-1"; background: transparent url(/img/arrow.png) no-repeat center right }
+#arrow    { display: none }
+.csstransforms #arrow { display: inline; position: absolute; right: -20px; font-family: Arial; -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); transform: (-45deg) }
+header p  { font-size: 2em; color: #fff }
+#intro    { width: 520px; font-size: 1.8em; color: #000; background: #ecd893 }
+#intro p  { margin: 0.5em 0 }
+#filters  { background: #000; color: #340f07; background: transparent url(/img/filters.png) no-repeat center top }
+#filters ul li { float: left; margin-right: 5px; width: 250px; height: 200px }
+#filters ul li h1  { font-size: 2.8em; font-family: "atrament-web-1" }
+#filters ul li p   { font-size: 1.8em }

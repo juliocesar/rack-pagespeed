@@ -9,11 +9,77 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" href="css/rack-pagespeed.css" />
     <script src="js/modernizr-1.6.min.js"></script>
+    <script type="text/javascript" src="http://use.typekit.com/qno6yyg.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
   <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
   <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
   <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
   <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
   <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+    <div id="wrapper">
+      <header>
+        <h1>
+          RACK-PAGESPEED
+        </h1>
+        <p>A Rack middleware for web page optimizations</p>
+      </header>
+      <section id="intro">
+        <p>
+          rack-pagespeed is a Rack middleware that helps reduce the time it takes for your web page/app to load.
+        </p>
+        <p>
+          How does it do that? It runs the output HTML through a series of <a>filters</a> that are actually best
+          practices implemented in code, but all done automatically for you.
+        </p>
+      </section>
+      <div class="clearfix"></div>
+      <section id="filters">
+        <ul>
+          <li>
+            <h1>Inline JavaScripts</h1>
+            <p>
+              Inlines external JavaScripts that are smaller
+              than 2 kilobytes.
+            </p>
+          </li>
+          <li>
+            <h1>Inline CSS</h1>
+            <p>
+              Inlines external stylesheets that are smaller
+              than 2 kilobytes.
+            </p>
+          </li>
+          <li>
+            <h1>Combine JavaScripts</h1>
+            <p>
+              Merges neighbouring JavaScripts together.
+            </p>
+          </li>
+          <li>
+            <h1>Combine CSS</h1>
+            <p>
+              Merges neighbouring stylesheets together.
+            </p>
+          </li>
+          <li>
+            <h1>Minify JavaScript</h1>
+            <p>
+              Minifies (compresses) JavaScripts.
+            </p>
+          </li>
+          <li class="wip">
+            <h1>Inline Images</h1>
+            <p>
+              Inlines small images using <a>data-URI</a>.
+            </p>
+          </li>
+          <li class="wip">
+            <h1>More coming soon.</h1>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </section>
+    </div>
   </body>
 </html>
