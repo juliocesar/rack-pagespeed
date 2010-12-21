@@ -1,15 +1,5 @@
-# rack-pagespeed
+# Gist
 
-This middleware _will_ (as in this is a work in progress) replicate possibly every feature found in Google's [modpagespeed](http://www.modpagespeed.com/).
+_rack-pagespeed_ is a "port" of [modpagespeed](http://modpagespeed.com) to Rack. It's still a work in progress in the sense that there's a handful of filters that aren't there yet, and it hasn't been thoroughly tested, so if you're planning on using it, make sure you do at least a cursory check of your app/website to ensure everything's looking good.
 
-# To do
-
-Everything. I'm just reserving the name for now.
-
-# Where's rack-bundle?
-
-I kept it in a branch called `bundle`. Though I strongly recommend you _not_ to use it. You can get the same effect (better actually, considering rack-pagespeed doesn't do some dumb stuff rack-bundle used to) by activating only the equivalent features in rack-pagespeed.
-
-# License
-
-It's as free as sneezing. Just [give me credit](http://twitter.com/julio_ody) if you make some extraordinary out of this.
+Check the [project's page](http://rack-pagespeed.heroku.com) for docs!
