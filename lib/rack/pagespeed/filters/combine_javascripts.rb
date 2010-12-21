@@ -5,8 +5,9 @@ rescue LoadError
 end
 
 class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::Base
-  name 'combine_javascripts'
   requires_store
+  name      'combine_javascripts'
+  priority  2
   
   def execute! document
     nodes = document.css('script[src$=".js"]:not([src^="http"])')

@@ -38,8 +38,8 @@ class Rack::PageSpeed::Config
   private
   def sort_filters
     @filters = @filters.sort_by do |filter|
-      filter.class.order 
-    end
+      filter.class.priority || 0
+    end.reverse
   end
   
   def enable_store_from_options

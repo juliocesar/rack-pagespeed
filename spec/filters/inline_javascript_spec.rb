@@ -4,6 +4,9 @@ describe 'the inline_javascript filter' do
   it "is called \"inline_javascript\" as far as Config is concerned" do
     Rack::PageSpeed::Filters::InlineJavaScript.name.should == 'inline_javascript'
   end
+  it "is a priority 10 filter" do
+    Rack::PageSpeed::Filters::InlineJavaScript.priority.should == 10
+  end
   
   context "#execute!" do
     before :each do

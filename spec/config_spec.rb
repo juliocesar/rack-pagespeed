@@ -2,8 +2,8 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'rack-pagespeed configuration' do
   before do
-    class StripsNaked < Rack::PageSpeed::Filters::Base; end
-    class MakesItLookGood < Rack::PageSpeed::Filters::Base; end
+    class StripsNaked < Rack::PageSpeed::Filter; end
+    class MakesItLookGood < Rack::PageSpeed::Filter; end
   end
 
   context 'when instancing a new object' do
@@ -18,9 +18,9 @@ describe 'rack-pagespeed configuration' do
 
   context 'sorts filter execution based on their specified order' do
     before do
-      class Larry < Rack::PageSpeed::Filter; order 1; end
-      class Moe < Rack::PageSpeed::Filter; order 2; end
-      class Curly < Rack::PageSpeed::Filter; order 3; end
+      class Larry < Rack::PageSpeed::Filter; priority 3; end
+      class Moe < Rack::PageSpeed::Filter; priority 2; end
+      class Curly < Rack::PageSpeed::Filter; priority 1; end
       @config = Rack::PageSpeed::Config.new :public => Fixtures.path do
         curly
         larry
@@ -71,8 +71,8 @@ describe 'rack-pagespeed configuration' do
         makes_it_look_good
         strips_naked
       end
-      config.filters.first.should be_a MakesItLookGood
-      config.filters.last.should be_a StripsNaked
+      config.filters.should include_an_instance_of MakesItLookGood
+      config.filters.should include_an_instance_of StripsNaked
     end
 
     # two specs below actually work with the optiosn hash based context too
@@ -86,7 +86,7 @@ describe 'rack-pagespeed configuration' do
     end
 
     it "won't add a filter if it's call returns false" do
-      class NeedsStore < Rack::PageSpeed::Filters::Base
+      class NeedsStore < Rack::PageSpeed::Filter
         requires_store
       end
       config = Rack::PageSpeed::Config.new do needs_store end

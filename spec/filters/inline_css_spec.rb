@@ -5,6 +5,10 @@ describe 'the inline_css filter' do
     Rack::PageSpeed::Filters::InlineCSS.name.should == 'inline_css'
   end
   
+  it "is a priority 10 filter" do
+    Rack::PageSpeed::Filters::InlineCSS.priority.should == 10
+  end
+  
   context "#execute!" do
     before :each do
       @filter = Rack::PageSpeed::Filters::InlineCSS.new :public => Fixtures.path

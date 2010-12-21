@@ -8,6 +8,10 @@ describe 'the combine_css filter' do
   it "requires a store mechanism to be passed via :store when initializing" do
     Rack::PageSpeed::Filters::CombineCSS.new.should be_false
   end
+  
+  it "is a priority 9 filter" do
+    Rack::PageSpeed::Filters::CombineCSS.priority.should == 9
+  end
 
   context 'execute!' do
     before :each do

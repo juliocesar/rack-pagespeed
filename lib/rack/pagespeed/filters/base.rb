@@ -28,8 +28,8 @@ module Rack::PageSpeed::Filters
         _name ? @name = _name : @name ||= underscore(to_s)
       end
       
-      def order _order = nil
-        _order ? @order = _order.to_i : @order || 999
+      def priority _number = nil
+        _number ? @priority = _number.to_i : @priority
       end
 
       private

@@ -63,7 +63,7 @@ describe 'rack-pagespeed' do
 
     it "calls #execute! on each filter it finds in it's config" do
       @pagespeed.call @env
-      $foo.should == ['foo', 'bar']
+      $foo.should include('foo', 'bar')
     end
   end
 

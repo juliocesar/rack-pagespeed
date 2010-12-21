@@ -5,6 +5,10 @@ describe 'the combine_javascripts filter' do
     Rack::PageSpeed::Filters::CombineJavaScripts.name.should == 'combine_javascripts'
   end
 
+  it "is a priority 9 filter" do
+    Rack::PageSpeed::Filters::CombineJavaScripts.priority 9
+  end
+
   context "requires a store mechanism to be passed via :store when initializing" do
     specify { Rack::PageSpeed::Filters::CombineJavaScripts.new.should be_false }
     specify { Rack::PageSpeed::Filters::CombineJavaScripts.new(:store => {}).should_not be_false }

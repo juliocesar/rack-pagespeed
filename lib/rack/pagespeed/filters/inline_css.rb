@@ -1,4 +1,6 @@
 class Rack::PageSpeed::Filters::InlineCSS < Rack::PageSpeed::Filters::Base
+  priority 10
+  
   def execute! document
     nodes = document.css('link[rel="stylesheet"][href$=".css"]:not([href^="http"])')
     return false unless nodes.count > 0

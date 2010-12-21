@@ -6,6 +6,7 @@ end
 
 class Rack::PageSpeed::Filters::CombineCSS < Rack::PageSpeed::Filters::Base
   requires_store
+  priority 9
   
   def execute! document
     nodes = document.css('link[rel="stylesheet"][href$=".css"]:not([href^="http"])')

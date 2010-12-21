@@ -29,6 +29,19 @@ Fixtures.noscripts = Nokogiri::HTML(fixture('noscripts.html'))
 Fixtures.noexternalcss = Nokogiri::HTML(fixture('noexternalcss.html'))
 Fixtures.styles = Nokogiri::HTML(fixture('styles.html'))
 
+
+def include_an_instance_of klass    
+  simple_matcher("have an instance of #{klass.to_s}") do |given|
+    given.select { |entry| entry.is_a? klass }.any?
+  end
+end
+
+RSpec::Matchers.define :include_an_instance_of do |klass|
+  match do |given|
+    given.select { |entry| entry.is_a? klass }.count > 0
+  end
+end
+
 RSpec.configure do |config|
   # Restore fixtures' original state
   config.before :each do

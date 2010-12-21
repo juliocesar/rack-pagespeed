@@ -4,6 +4,10 @@ describe 'the minify_javascript filter' do
   it "is called \"minify_javascript\" as far as Config is concerned" do
     Rack::PageSpeed::Filters::MinifyJavaScript.name.should == 'minify_javascript'
   end
+  
+  it "is a priority 8 filter" do
+    Rack::PageSpeed::Filters::MinifyJavaScript.priority.should == 8
+  end
 
   context "requires a storage mechanism to be passed via :store when initializing" do
     specify { Rack::PageSpeed::Filters::MinifyJavaScript.new.should be_false }

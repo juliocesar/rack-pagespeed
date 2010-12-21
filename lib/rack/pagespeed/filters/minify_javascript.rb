@@ -6,8 +6,9 @@ rescue LoadError
 end
 
 class Rack::PageSpeed::Filters::MinifyJavaScript < Rack::PageSpeed::Filters::Base
-  name 'minify_javascript'
   requires_store
+  name      'minify_javascript'
+  priority  8
       
   def execute! document
     nodes = document.css('script')

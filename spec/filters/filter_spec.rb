@@ -26,25 +26,19 @@ describe 'the base filter class' do
     end      
   end
   
-  context 'the #order declaration, which defines the order that the filter will be executed' do
+  context 'the #priority declaration, which defines the order that the filter will be executed' do
     it 'takes a number' do
       class NiceFilter < Rack::PageSpeed::Filter
-        order 1
+        priority 1
       end
-      NiceFilter.order.should == 1
+      NiceFilter.priority.should == 1
     end
     it 'takes a string' do
       class NiceFilter < Rack::PageSpeed::Filter
-        order '1'
+        priority '1'
       end
-      NiceFilter.order.should == 1
+      NiceFilter.priority.should == 1
     end    
-    it 'takes a pretty string even' do
-      class PrettyFilter < Rack::PageSpeed::Filter
-        order '1st'
-      end
-      PrettyFilter.order.should == 1
-    end
   end
 
   context '#file_for returns a File object' do
