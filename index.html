@@ -173,6 +173,11 @@
             <span class="indent"># or</span><br />
             <span class="indent">store :memcached => 'address:port'><br />
         </code>
+        <p>
+          Neat trick: if your app can write to it's public dir, if you call <code>store :disk => "app's public dir"</code>,
+          requests for bundled/compressed assets won't even hit the application stack. Meaning, the performance gain of serving them
+          is huge.
+        </p>
       </section>
     </div>
   </body>
