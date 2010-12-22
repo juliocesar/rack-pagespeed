@@ -29,8 +29,8 @@
           rack-pagespeed is a Rack middleware that helps reduce the time it takes for your web page/app to load.
         </p>
         <p>
-          How does it do that? It runs the output HTML through a series of <a>filters</a> that are actually best
-          practices implemented in code, but all done automatically for you.
+          How does it do that? It runs the output HTML through a series of <a>filters</a> which apply a series of best
+          practices implemented, all done automatically for you.
         </p>
       </section>
       <div class="clearfix"></div>
@@ -85,7 +85,7 @@
         <code>
           require 'rack/pagespeed'<br />
           require 'myapp'<br />
-          use Rack::PageSpeed, :public => "path to your app's public dir" do<br />
+          use Rack::PageSpeed, :public => "/app/public/dir" do<br />
             <span class="indent">store :disk => Dir.tmpdir # require 'tmpdir'</span><br />
             <span class="indent">inline_javascript :max_size => 4000</span><br />
             <span class="indent">inline_css</span><br />
@@ -119,7 +119,7 @@
           class RemovesImages &lt; Rack::PageSpeed::Filter<br />
             <span class="indent">def execute! document</span><br />
               <span class="indent">
-                <span class="indent">document.css('img').remove</span>
+                <span class="indent">document.css('img').remove if rand(99) > @options[:chance] - 1</span>
               </span><br />
             <span class="indent">end</span><br />
           end
@@ -131,13 +131,13 @@
         </p>
         <p>So after declaring, you can call it like so:</p>
         <code>
-          use Rack::PageSpeed, :public => "path to your app's public dir" do<br />
-            <span class="indent">remove_images</span><br />
+          use Rack::PageSpeed, :public => "/app/public/dir" do<br />
+            <span class="indent">remove_images :chance => 50</span><br />
           end
         </code>
         <p>
-          rack-pagespeed will create a method out of the class name that looks much like what comes out of
-          Rails' <code>#underscore</code> method.
+          rack-pagespeed will create a method out of the class name that looks much like what comes out of Rails' <code>#underscore</code> 
+          method. Any options that you pass (do pass a Hash), if any, will be accessible via <code>@options</code>.
         </p>
       </section>
       <section id="storage" class="regular">
@@ -156,22 +156,22 @@
           </li>
         </ol>
         <p>
-          So now instead of, say, 4 HTTP request for each script, the browser will make 1, which rack-pagespeed will
-          intercept and server the bundle instead.
+          So now instead of, say, 4 separate HTTP requests (one for each script), the browser will make 1, which rack-pagespeed 
+          will intercept and serve the bundle instead.
         </p>
         <p>
-          There's two types of storage available by default: disk storage (filesystem), and <a>Memcached</a>.
-          You can use call them like this:
+          There's two types of storage available by default: disk storage (file system), and <a>Memcached</a>.
+          You can use them like this:
         </p>
         <code>
-          use Rack::PageSpeed, :public => "your app's public dir" do<br />
-            <span class="indent">store :disk</span> # will default the Dir.tmpdir<br />
+          use Rack::PageSpeed, :public => "/app/public/dir" do<br />
+            <span class="indent">store :disk</span> # defaults to Dir.tmpdir<br />
             <span class="indent"># or</span><br />
-            <span class="indent">store :disk => SOMEDIR</span> # where SOMEDIR is the path to a directory<br />
+            <span class="indent">store :disk => "/path/to/some/dir"</span><br />
             <span class="indent"># or</span><br />
             <span class="indent">store :memcached # defaults to localhost:11211</span><br />
             <span class="indent"># or</span><br />
-            <span class="indent">store :memcached => 'address:port'><br />
+            <span class="indent">store :memcached => 'address:port'<br />
         </code>
         <p>
           Neat trick: if your app can write to it's public dir, if you call <code>store :disk => "app's public dir"</code>,
