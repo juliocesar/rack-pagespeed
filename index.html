@@ -19,10 +19,10 @@
   <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
     <div id="wrapper">
       <header>
+        <p>Instructions manual</p>
         <h1>
           RACK-PAGESPEED
         </h1>
-        <p>A Rack middleware for web page optimizations</p>
       </header>
       <section id="intro">
         <p>
@@ -34,51 +34,145 @@
         </p>
       </section>
       <div class="clearfix"></div>
-      <section id="filters">
-        <ul>
+      <ul id="filters">
+        <li>
+          <h1>Inline JavaScripts</h1>
+          <p>
+            Inlines external JavaScripts that are smaller
+            than 2 kilobytes.
+          </p>
+        </li>
+        <li>
+          <h1>Inline CSS</h1>
+          <p>
+            Inlines external stylesheets that are smaller
+            than 2 kilobytes.
+          </p>
+        </li>
+        <li>
+          <h1>Combine JavaScripts</h1>
+          <p>
+            Merges neighbouring JavaScripts together.
+          </p>
+        </li>
+        <li>
+          <h1>Combine CSS</h1>
+          <p>
+            Merges neighbouring stylesheets together.
+          </p>
+        </li>
+        <li>
+          <h1>Minify JavaScript</h1>
+          <p>
+            Minifies (compresses) JavaScripts.
+          </p>
+        </li>
+        <li class="wip">
+          <h1>Inline Images</h1>
+          <p>
+            Inlines small images using <a>data-URI</a>.
+          </p>
+        </li>
+        <li class="more">
+          <h1>More coming soon.</h1>
+        </li>
+      </ul>
+      <section id="instructions" class="regular">
+        <h1>Installation and usage</h1>
+        <p>Install via rubygems:</p>
+        <code>$ gem install rack-pagespeed</code>
+        <p>Example usage with Sinatra (in a rackup file, a.k.a. config.ru)</p>
+        <code>
+          require 'rack/pagespeed'<br />
+          require 'myapp'<br />
+          use Rack::PageSpeed, :public => "path to your app's public dir" do<br />
+            <span class="indent">store :disk => Dir.tmpdir # require 'tmpdir'</span><br />
+            <span class="indent">inline_javascript :max_size => 4000</span><br />
+            <span class="indent">inline_css</span><br />
+            <span class="indent">combine_javascripts</span><br />
+          end<br />
+          run Sinatra::Application
+        </code>
+        <p>Usage with Rails:</p>
+        <code>
+          something
+        </code>
+        <p>
+          In a nutshell: invoke the filters you want and pass them parameters.
+          rack-pagespeed will then figure out the best order of execution and run
+          the filters you invoked against the document.
+        </p>
+      </section>
+      <section id="explain-filters" class="regular reverse">
+        <h1>Filters</h1>
+        <p>
+          Filters modify the document in some way. The default filters are heavily inspired (or borrowed even, if you will) from
+          Google's <a>modpagespeed</a>, for the <a>Apache web server</a>. I believe though that, as much as this middleware is
+          slower than it, it's useful for at least 2 scenarios: when you don't have control over the web server, or when your
+          web server isn't Apache. I can also come up with customized excuses if you need any.
+        </p>
+        <p>
+          Rolling your own filter is easy: subclass <code>Rack::PageSpeed::Filter</code>, define a <code>#execute!</code> method
+          on your class which takes a Nokogiri HTML document as parameter, and you're set. For example:
+        </p>
+        <code>
+          class RemovesImages &lt; Rack::PageSpeed::Filter<br />
+            <span class="indent">def execute! document</span><br />
+              <span class="indent">
+                <span class="indent">document.css('img').remove</span>
+              </span><br />
+            <span class="indent">end</span><br />
+          end
+        </code>
+        <p>
+          It doesn't matter where you define the class, as long as you do it before invoking it, perhaps in a separate file
+          which you'll <code>#require</code> or even inside the block where you invoke the filters. Wherever it is, rack-pagespeed 
+          will know where to find it.
+        </p>
+        <p>So after declaring, you can call it like so:</p>
+        <code>
+          use Rack::PageSpeed, :public => "path to your app's public dir" do<br />
+            <span class="indent">remove_images</span><br />
+          end
+        </code>
+        <p>
+          rack-pagespeed will create a method out of the class name that looks much like what comes out of
+          Rails' <code>#underscore</code> method.
+        </p>
+      </section>
+      <section id="storage" class="regular">
+        <h1>Storage</h1>
+        <p>
+          Some filters may require some kind of storage where they can keep the result of their process. For example, the
+          <code>combine_javascripts</code> filter, in order to make the results of it's process available, it will:
+        </p>
+        <ol>
+          <li>join neighbouring JavaScripts it finds.</li>
+          <li>put their joined contents in storage.</li>
           <li>
-            <h1>Inline JavaScripts</h1>
-            <p>
-              Inlines external JavaScripts that are smaller
-              than 2 kilobytes.
-            </p>
+            replace the references to each individual script file in the HTML for a special URL which rack-pagespeed can
+            use to locate the joined result saved in storage. It looks like
+            <code>/rack-pagespeed-098f6bcd4621d373cade4e832627b4f6.js</code>.
           </li>
-          <li>
-            <h1>Inline CSS</h1>
-            <p>
-              Inlines external stylesheets that are smaller
-              than 2 kilobytes.
-            </p>
-          </li>
-          <li>
-            <h1>Combine JavaScripts</h1>
-            <p>
-              Merges neighbouring JavaScripts together.
-            </p>
-          </li>
-          <li>
-            <h1>Combine CSS</h1>
-            <p>
-              Merges neighbouring stylesheets together.
-            </p>
-          </li>
-          <li>
-            <h1>Minify JavaScript</h1>
-            <p>
-              Minifies (compresses) JavaScripts.
-            </p>
-          </li>
-          <li class="wip">
-            <h1>Inline Images</h1>
-            <p>
-              Inlines small images using <a>data-URI</a>.
-            </p>
-          </li>
-          <li class="wip">
-            <h1>More coming soon.</h1>
-          </li>
-        </ul>
-        <div class="clearfix"></div>
+        </ol>
+        <p>
+          So now instead of, say, 4 HTTP request for each script, the browser will make 1, which rack-pagespeed will
+          intercept and server the bundle instead.
+        </p>
+        <p>
+          There's two types of storage available by default: disk storage (filesystem), and <a>Memcached</a>.
+          You can use call them like this:
+        </p>
+        <code>
+          use Rack::PageSpeed, :public => "your app's public dir" do<br />
+            <span class="indent">store :disk</span> # will default the Dir.tmpdir<br />
+            <span class="indent"># or</span><br />
+            <span class="indent">store :disk => SOMEDIR</span> # where SOMEDIR is the path to a directory<br />
+            <span class="indent"># or</span><br />
+            <span class="indent">store :memcached # defaults to localhost:11211</span><br />
+            <span class="indent"># or</span><br />
+            <span class="indent">store :memcached => 'address:port'><br />
+        </code>
       </section>
     </div>
   </body>
