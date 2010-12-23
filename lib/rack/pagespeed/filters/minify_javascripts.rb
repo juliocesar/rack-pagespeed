@@ -5,9 +5,9 @@ rescue LoadError
   require 'digest/md5'
 end
 
-class Rack::PageSpeed::Filters::MinifyJavaScript < Rack::PageSpeed::Filters::Base
+class Rack::PageSpeed::Filters::MinifyJavaScripts < Rack::PageSpeed::Filters::Base
   requires_store
-  name      'minify_javascript'
+  name      'minify_javascripts'
   priority  8
       
   def execute! document

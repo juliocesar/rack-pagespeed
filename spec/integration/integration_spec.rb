@@ -17,7 +17,7 @@ RSpec.configure do |config|
     use Rack::Static, :root => zecoolwebsite, :urls => %w(/img /css /js)
     use Rack::PageSpeed, :public => zecoolwebsite do
       store :disk => Dir.tmpdir + '/pagespeed'
-      inline_javascript
+      inline_javascripts
       inline_css
       combine_javascripts
       combine_css

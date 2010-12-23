@@ -1,5 +1,5 @@
-class Rack::PageSpeed::Filters::InlineJavaScript < Rack::PageSpeed::Filter
-  name      'inline_javascript'
+class Rack::PageSpeed::Filters::InlineJavaScripts < Rack::PageSpeed::Filter
+  name      'inline_javascripts'
   priority  10
       
   def execute! document
