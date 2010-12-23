@@ -29,8 +29,8 @@
           rack-pagespeed is a Rack middleware that helps reduce the time it takes for your web page/app to load.
         </p>
         <p>
-          How does it do that? It runs the output HTML through a series of <a>filters</a> which apply a series of best
-          practices automatically for you.
+          How does it do that? It runs the output HTML through filters that apply a series of best practices
+          automatically for you.
         </p>
       </section>
       <div class="clearfix"></div>
@@ -41,6 +41,10 @@
             Inlines external JavaScripts that are smaller
             than 2 kilobytes.
           </p>
+          <code>
+            inline_javascripts
+              <span class="options">:max_size => &lt;bytes&gt;</span>
+          </code>
         </li>
         <li>
           <h1>Inline CSS</h1>
@@ -48,33 +52,43 @@
             Inlines external stylesheets that are smaller
             than 2 kilobytes.
           </p>
+          <code>
+            inline_css
+              <span class="options">:max_size => &lt;bytes&gt;</span>
+          </code>
         </li>
         <li>
           <h1>Combine JavaScripts</h1>
           <p>
             Merges neighbouring JavaScripts together.
           </p>
+          <code>
+            combine_javascripts
+          </code>
         </li>
         <li>
           <h1>Combine CSS</h1>
           <p>
             Merges neighbouring stylesheets together.
           </p>
+          <code>
+            combine_css
+          </code>
         </li>
         <li>
-          <h1>Minify JavaScript</h1>
+          <h1>Minify JavaScripts</h1>
           <p>
             Minifies (compresses) JavaScripts.
           </p>
+          <code>
+            minify_javascripts
+          </code>          
         </li>
         <li class="wip">
           <h1>Inline Images</h1>
           <p>
-            Inlines small images using <a>data-URI</a>.
+            Inlines small images using data URI.
           </p>
-        </li>
-        <li class="more">
-          <h1>More coming soon.</h1>
         </li>
       </ul>
       <section id="instructions" class="regular">
@@ -126,7 +140,7 @@
         </code>
         <p>
           It doesn't matter where you define the class, as long as you do it before invoking it, perhaps in a separate file
-          which you'll <code>#require</code> or even inside the block where you invoke the filters. Wherever it is, rack-pagespeed 
+          which you'll <code>#require</code> or even inside the block where you invoke the filters. Wherever it is, rack-pagespeed
           will know where to find it.
         </p>
         <p>So after declaring, you can call it like so:</p>
@@ -136,7 +150,7 @@
           end
         </code>
         <p>
-          rack-pagespeed will create a method out of the class name that looks much like what comes out of Rails' <code>#underscore</code> 
+          rack-pagespeed will create a method out of the class name that looks much like what comes out of Rails' <code>#underscore</code>
           method. Any options that you pass (do pass a Hash), if any, will be accessible via <code>@options</code>.
         </p>
       </section>
@@ -156,7 +170,7 @@
           </li>
         </ol>
         <p>
-          So now instead of, say, 4 separate HTTP requests (one for each script), the browser will make 1, which rack-pagespeed 
+          So now instead of, say, 4 separate HTTP requests (one for each script), the browser will make 1, which rack-pagespeed
           will intercept and serve the bundle instead.
         </p>
         <p>
@@ -171,13 +185,13 @@
             <span class="indent"># or</span><br />
             <span class="indent">store :memcached # defaults to localhost:11211</span><br />
             <span class="indent"># or</span><br />
-            <span class="indent">store :memcached => 'address:port'<br />
+            <span class="indent">store :memcached => 'address:port'</span>
         </code>
         <p>
           Neat trick: if your app can write to it's public dir, if you call <code>store :disk => "app's public dir"</code>,
           requests for bundled/compressed assets won't even hit the application stack. Meaning, huge performance gains.
         </p>
-      </section>      
+      </section>
       <section id="caveats" class="regular reverse">
         <h1>Caveats & issues</h1>
         <p>

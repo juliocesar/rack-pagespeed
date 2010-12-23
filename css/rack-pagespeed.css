@@ -50,6 +50,24 @@ header p  { font-size: 2em; color: #fff }
 #filters li { display: inline-block; vertical-align: top; margin-right: 5px; width: 250px; height: 200px }
 #filters li h1  { font-size: 2.8em; font-family: "atrament-web-1" }
 #filters li p   { font-size: 1.8em }
+#filters li code { display: inline-block; margin-top: 1em; font-size: 1.2em }
+#filters li code .options { text-indent: 1em }
+#filters li.wip { position: relative; opacity: 0.8 }
+#filters li.wip:after {
+  position: absolute;
+  top: 40%; left: 10%;
+  font-size: 1.6em;
+  padding: 0.5em;
+  content: 'Under construction';
+  display: inline-block;
+  background: #e6b356;
+  -moz-transform:     rotate(15deg);
+  -webkit-transform:  rotate(15deg);
+  transform:          rotate(15deg);
+  -webkit-box-shadow: 1px 1px 0px #000;
+  -moz-box-shadow:    1px 1px 0px #000;
+  box-shadow:         1px 1px 0px #000;
+}
 section.regular   { background: #340f07; color: #f0db8a }
 section.regular h1  { display: inline-block; background: inherit; padding: 0.1em 0.3em; margin-bottom: 0.2em; border: 2px #f0db8a dashed; font-size: 2.6em }
 section.regular p   { font-size: 1.8em; margin: 0.5em 0 }
