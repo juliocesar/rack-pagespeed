@@ -24,7 +24,7 @@ a:link            { -webkit-tap-highlight-color: #FF5E99 }
 ::-moz-selection{ background: #F400BF; color: #FFF; text-shadow: none }
 ::selection { background: #F400BF; color: #FFF; text-shadow: none }
 .ie7 img    { -ms-interpolation-mode: bicubic }
-ul { list-style-type: none;  }
+ul { list-style-type: square; list-style-position: inside }
 ol { list-style-position: inside }
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden }
 .clearfix { display: block; padding: 0 !important }
@@ -32,6 +32,7 @@ ol { list-style-position: inside }
 
 a { cursor: pointer; display: inline-block; padding: 0 0.2em; background: #f9fda2; color: #340f07; border-bottom: 1px solid rgba(0, 0, 0, 0.2) }
 .indent { text-indent: 1em }
+.heart  { font-family: Arial }
 code      { font-size: 1.2em }  
 code span { display: inline-block }
 body      { background: #c0a987; font-family: "myriad-pro-condensed-1"; font-weight: 400 }
@@ -53,9 +54,9 @@ section.regular   { background: #340f07; color: #f0db8a }
 section.regular h1  { display: inline-block; background: inherit; padding: 0.1em 0.3em; margin-bottom: 0.2em; border: 2px #f0db8a dashed; font-size: 2.6em }
 section.regular p   { font-size: 1.8em; margin: 0.5em 0 }
 section.regular code { color: #fff }
-section.regular ol { font-size: 1.8em }
-section.regular p code,
-section.regular ol code { font-size: 75% }
+section.regular ol,
+section.regular ul { font-size: 1.8em }
+section.regular * code { font-size: 75% }
 
 section.reverse { background: #ecd893; color: #340f07 }
 section.reverse h1 { color: #340f07; border-color: #340f07;}

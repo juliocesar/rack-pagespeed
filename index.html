@@ -30,7 +30,7 @@
         </p>
         <p>
           How does it do that? It runs the output HTML through a series of <a>filters</a> which apply a series of best
-          practices implemented, all done automatically for you.
+          practices automatically for you.
         </p>
       </section>
       <div class="clearfix"></div>
@@ -175,8 +175,39 @@
         </code>
         <p>
           Neat trick: if your app can write to it's public dir, if you call <code>store :disk => "app's public dir"</code>,
-          requests for bundled/compressed assets won't even hit the application stack. Meaning, the performance gain of serving them
-          is huge.
+          requests for bundled/compressed assets won't even hit the application stack. Meaning, huge performance gains.
+        </p>
+      </section>      
+      <section id="caveats" class="regular reverse">
+        <h1>Caveats & issues</h1>
+        <p>
+          I'll call it for what it is: rack-pagespeed is to be considered alpha at this stage. Meaning: make sure you do at least
+          a cursory check to ensure everything's working after you include this middleware in your stack. I'll happily look into
+          <a href="https://github.com/juliocesar/rack-pagespeed/issues">issues reported via GitHub</a> or
+          <a href="mailto:julio@awesomebydesign.com">email</a>.
+        </p>
+        <p>Stuff to bear in mind:</p>
+        <ul>
+          <li>
+            Filters will run every time a response of type <code>text/html</code> is issued by your application. While that might
+            concern some, I found them to be pretty cheap on the memory/CPU side, so well worth using even if you're not caching
+            things properly...
+          </li>
+          <li>
+            ... and speaking of caching, most sane web servers will issue <code>304 Not Modified</code> in subsequent requests
+            for a document. In this case, rack-pagespeed won't even see, and hence, won't run any filters on it.
+          </li>
+          <li>
+            The web page/app performance equation is terribly complex. Though given nowadays' reality of latency and/or low bandwidth,
+            minimizing the number of requests a web browser has to make is a safe bet towards improving it.
+          </li>
+        </ul>
+      </section>
+      <section id="moi" class="regular">
+        <h1>Author</h1>
+        <p>
+          rack-pagespeed is made with <span class="heart">♥</span> by <a href="http://awesomebydesign.com">Julio Cesar Ody</a>.
+          All code is public domain. This page's design however, is not.
         </p>
       </section>
     </div>
