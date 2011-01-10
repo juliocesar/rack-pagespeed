@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Julio Cesar Ody"]
-  s.date = %q{2010-12-23}
+  s.date = %q{2011-01-10}
   s.description = %q{Web page speed optimizations at the Rack level}
   s.email = %q{julio@awesomebydesign.com}
   s.extra_rdoc_files = [
@@ -29,18 +29,22 @@ Gem::Specification.new do |s|
     "lib/rack/pagespeed/filters/combine_css.rb",
     "lib/rack/pagespeed/filters/combine_javascripts.rb",
     "lib/rack/pagespeed/filters/inline_css.rb",
+    "lib/rack/pagespeed/filters/inline_images.rb",
     "lib/rack/pagespeed/filters/inline_javascripts.rb",
     "lib/rack/pagespeed/filters/minify_javascripts.rb",
     "lib/rack/pagespeed/store/all.rb",
     "lib/rack/pagespeed/store/disk.rb",
     "lib/rack/pagespeed/store/memcached.rb",
+    "rack-pagespeed.gemspec",
     "spec/config_spec.rb",
     "spec/filters/combine_css_spec.rb",
     "spec/filters/combine_javascripts_spec.rb",
     "spec/filters/filter_spec.rb",
     "spec/filters/inline_css_spec.rb",
+    "spec/filters/inline_images_spec.rb",
     "spec/filters/inline_javascript_spec.rb",
     "spec/filters/minify_javascript_spec.rb",
+    "spec/fixtures/all-small-dog-breeds.jpg",
     "spec/fixtures/complex.html",
     "spec/fixtures/foo.js",
     "spec/fixtures/hh-reset.css",
@@ -89,6 +93,7 @@ Gem::Specification.new do |s|
     "spec/filters/combine_javascripts_spec.rb",
     "spec/filters/filter_spec.rb",
     "spec/filters/inline_css_spec.rb",
+    "spec/filters/inline_images_spec.rb",
     "spec/filters/inline_javascript_spec.rb",
     "spec/filters/minify_javascript_spec.rb",
     "spec/integration/integration_spec.rb",
@@ -106,7 +111,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
       s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
-      s.add_runtime_dependency(%q<mime-types>, ["= 1.16"])
       s.add_runtime_dependency(%q<jsmin>, ["= 1.0.1"])
       s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
@@ -120,7 +124,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_dependency(%q<rack>, ["= 1.2.1"])
       s.add_dependency(%q<memcached>, ["= 1.0.2"])
-      s.add_dependency(%q<mime-types>, ["= 1.16"])
       s.add_dependency(%q<jsmin>, ["= 1.0.1"])
       s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_dependency(%q<rack>, ["= 1.2.1"])
@@ -135,7 +138,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
     s.add_dependency(%q<rack>, ["= 1.2.1"])
     s.add_dependency(%q<memcached>, ["= 1.0.2"])
-    s.add_dependency(%q<mime-types>, ["= 1.16"])
     s.add_dependency(%q<jsmin>, ["= 1.0.1"])
     s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
     s.add_dependency(%q<rack>, ["= 1.2.1"])

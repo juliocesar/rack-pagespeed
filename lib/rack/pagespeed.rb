@@ -1,6 +1,5 @@
 require 'rack'
 require 'nokogiri'
-require 'mime/types'
 
 module Rack
   class PageSpeed
@@ -35,7 +34,7 @@ module Rack
       if asset = store[asset_id]
         [
           200,
-          { 'Content-Type' => (MIME::Types.type_for(asset_id).first.content_type rescue 'text/plain') },
+          { 'Content-Type' => (Rack::Mime.mime_type(::File.extname(asset_id))) },
           [asset]
         ]
       else

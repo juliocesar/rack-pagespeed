@@ -1,4 +1,4 @@
-class Rack::PageSpeed::Filters::InlineCSS < Rack::PageSpeed::Filters::Base
+class Rack::PageSpeed::Filters::InlineCSS < Rack::PageSpeed::Filter
   priority 10
   
   def execute! document

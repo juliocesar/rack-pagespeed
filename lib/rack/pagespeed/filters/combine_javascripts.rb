@@ -4,7 +4,7 @@ rescue LoadError
   require 'digest/md5'
 end
 
-class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filters::Base
+class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   requires_store
   name      'combine_javascripts'
   priority  2
