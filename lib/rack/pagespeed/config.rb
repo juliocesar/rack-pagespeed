@@ -31,7 +31,7 @@ class Rack::PageSpeed::Config
     end
   end
 
-  def method_missing filter
+  def method_missing filter, *args
     raise NoSuchFilter, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filter.available_filters).join(', ')}"
   end
 

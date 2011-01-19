@@ -42,24 +42,22 @@ describe 'rack-pagespeed configuration' do
   end
 
   context 'enabling filters, options hash based' do
-    context 'options[:filters]' do
-      before { File.stub(:directory?).and_return(true) }
+    before { File.stub(:directory?).and_return(true) }
 
-      it "if it's an array, it enables filters listed in it with their default options" do
-        config = Rack::PageSpeed::Config.new :filters => [:makes_it_look_good]
-        config.filters.first.should be_a MakesItLookGood
-      end
-
-      it "if it's a hash, it let's you pass options to the filters logically" do
-        config = Rack::PageSpeed::Config.new :filters => {:makes_it_look_good => {:test => 6000}}
-        filter = config.filters.first
-        filter.should be_a MakesItLookGood
-        filter.options[:test].should == 6000 # yeah, 2 assertions, bad, bad
-      end
+    it "if it's an array, it enables filters listed in it with their default options" do
+      config = Rack::PageSpeed::Config.new :filters => [:makes_it_look_good]
+      config.filters.first.should be_a MakesItLookGood
     end
 
-    it 'raises a NoSuchFilterError when a non-existing filter is passed to :filters' do
-      expect { Rack::PageSpeed.new page, :filters => [:whoops!] }.to raise_error
+    it "if it's a hash, it let's you pass options to the filters logically" do
+      config = Rack::PageSpeed::Config.new :filters => {:makes_it_look_good => {:test => 6000}}
+      filter = config.filters.first
+      filter.should be_a MakesItLookGood
+      filter.options[:test].should == 6000 # yeah, 2 assertions, bad, bad
+    end
+
+    it 'raises a NoSuchFilter error when a non-existing filter is passed to :filters' do
+      expect { Rack::PageSpeed::Config.new :filters => [:whoops!] }.to raise_error(Rack::PageSpeed::Config::NoSuchFilter)
     end
   end
 
@@ -91,6 +89,10 @@ describe 'rack-pagespeed configuration' do
       end
       config = Rack::PageSpeed::Config.new do needs_store end
       config.filters.should be_empty
+    end
+    
+    it 'raises a NoSuchFilter error when a non-existing filter is called ' do
+      expect { Rack::PageSpeed::Config.new do whateva :foo => 'bar' end }.to raise_error(Rack::PageSpeed::Config::NoSuchFilter)
     end
   end
 
