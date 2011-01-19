@@ -76,7 +76,7 @@ describe 'rack-pagespeed' do
       end
 
       it "responds with the contents in store that match the asset unique id" do
-        @response.to_s.should == 'Little poney'
+        @response.first.to_s.should == 'Little poney'
       end
     
       it "responds with the appropriate MIME type for the asset stored" do

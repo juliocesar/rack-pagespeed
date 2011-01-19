@@ -32,7 +32,7 @@ class Rack::PageSpeed::Config
   end
 
   def method_missing filter
-    raise NoSuchFilter, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filters::Base.available_filters).join(', ')}"
+    raise NoSuchFilter, "No such filter \"#{filter}\". Available filters: #{(Rack::PageSpeed::Filter.available_filters).join(', ')}"
   end
 
   private
@@ -61,7 +61,7 @@ class Rack::PageSpeed::Config
   end
 
   def filters_to_methods
-    Rack::PageSpeed::Filters::Base.available_filters.each do |klass|
+    Rack::PageSpeed::Filter.available_filters.each do |klass|
       (class << self; self; end).send :define_method, klass.name do |*options|
         default_options = {:public => @options[:public], :store => @store}
         instance = klass.new(options.any? ? default_options.merge(*options) : default_options)
