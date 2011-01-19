@@ -1,3 +1,5 @@
+require 'uri'
+
 module Rack::PageSpeed::Filters
   class Base
     attr_reader :document, :options
@@ -44,7 +46,7 @@ module Rack::PageSpeed::Filters
 
     private
     def file_for node
-      path = ::File.join options[:public], case node.name
+      path = case node.name
       when 'script'
         node['src']
       when 'img'
@@ -52,6 +54,8 @@ module Rack::PageSpeed::Filters
       when 'link'
         node['href']
       end
+      return false unless path
+      path = ::File.join(options[:public], URI.parse(path).path)
       ::File.open path if ::File.exists? path      
     end
   end

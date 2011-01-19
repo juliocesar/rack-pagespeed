@@ -10,7 +10,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   priority  2
   
   def execute! document
-    nodes = document.css('script[src$=".js"]:not([src^="http"])')
+    nodes = document.css('script[src]')
     return false unless nodes.count > 0
     groups = group_siblings topmost_of_sequence(nodes)
     groups.each do |group|
@@ -36,7 +36,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   end
   
   def local_script? node
-    node.name == 'script' && !(node['src'] =~ /^http/ or !(node['src'] =~ /.js$/))
+    node.name == 'script' and file_for(node)
   end
   
   def topmost_of_sequence nodes
@@ -44,7 +44,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
     nodes.each do |node|
       _previous, _next = node.previous_sibling, node.next_sibling
       if _previous && local_script?(_previous) &&
-        (!_next || !local_script?(_next))
+        (!_next || !file_for(_next))
         result << node
       end
     end

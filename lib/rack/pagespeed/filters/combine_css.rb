@@ -9,7 +9,7 @@ class Rack::PageSpeed::Filters::CombineCSS < Rack::PageSpeed::Filter
   priority 9
   
   def execute! document
-    nodes = document.css('link[rel="stylesheet"][href$=".css"]:not([href^="http"])')
+    nodes = document.css('link[rel="stylesheet"][href]')
     return false unless nodes.count > 0
     groups = group_siblings topmost_of_sequence(nodes)
     groups.each do |group|
@@ -32,7 +32,7 @@ class Rack::PageSpeed::Filters::CombineCSS < Rack::PageSpeed::Filter
   end
   
   def local_css? node
-    node.name == 'link' && !(node['href'] =~ /^http/ or !(node['href'] =~ /.css$/))
+    node.name == 'link' and file_for(node)
   end
   
   def topmost_of_sequence nodes
