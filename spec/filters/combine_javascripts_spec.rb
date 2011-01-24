@@ -39,10 +39,20 @@ describe 'the combine_javascripts filter' do
       result = @filter.send :group_siblings, nodes
       result.should == [[nodes[0].previous_element, nodes[0]], [nodes[1].previous_element, nodes[1]]]
     end
-
-    it '#unique_id a key thats unique to the nodes combination of content + mtime' do
-      nodes = Fixtures.complex.css('script[src$=".js"]:not([src^="http"]) + script[src$=".js"]:not([src^="http"])')
-      @filter.send(:unique_id, nodes).should == Digest::MD5.hexdigest(nodes.map { |node| file = @filter.send(:file_for, node); file.mtime.to_i.to_s + file.read }.join)
+    
+    context 'the #unique_id method' do
+      it "generates a hash thats unique to the nodes' combination of content + mtime in the absence of @options[:hash]" do
+        nodes = Fixtures.complex.css('script[src$=".js"]:not([src^="http"]) + script[src$=".js"]:not([src^="http"])')
+        @filter.send(:unique_id, nodes).should == Digest::MD5.hexdigest(nodes.map { |node| file = @filter.send(:file_for, node); file.mtime.to_i.to_s + file.read }.join)
+      end
+      
+      it "uses values for hashes estipulated in @options[:hash] if any" do
+        nodes = []
+        nodes << Fixtures.complex.at_css('script[src="ohno.js"]')
+        nodes << Fixtures.complex.at_css('script[src="foo.js"]')
+        filter = Rack::PageSpeed::Filters::CombineJavaScripts.new :store => {}, :hash => { %W(ohno.js foo.js) => "romanking" }
+        filter.send(:unique_id, nodes).should == "romanking"
+      end
     end
   end
 end

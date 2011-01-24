@@ -52,7 +52,15 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   end
 
   def unique_id nodes
-    Digest::MD5.hexdigest nodes.map { |node| file = file_for node; file.mtime.to_i.to_s + file.read }.join
+    return Digest::MD5.hexdigest nodes.map { |node| 
+      file = file_for node
+      next unless file
+      file.mtime.to_i.to_s + file.read
+    }.join unless @options[:hash]
+    @options[:hash].each do |urls, hash|
+      next unless (nodes.map { |node| node['src'] } & urls).length == urls.length
+      return hash
+    end
   end
   
   def group_siblings nodes
