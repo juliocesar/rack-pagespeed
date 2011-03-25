@@ -7,7 +7,7 @@ end
 class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   requires_store
   name      'combine_javascripts'
-  priority  2
+  priority  8
   
   def execute! document
     nodes = document.css('script[src]')

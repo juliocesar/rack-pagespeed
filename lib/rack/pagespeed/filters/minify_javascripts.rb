@@ -8,7 +8,7 @@ end
 class Rack::PageSpeed::Filters::MinifyJavaScripts < Rack::PageSpeed::Filters::Base
   requires_store
   name      'minify_javascripts'
-  priority  8
+  priority  2
       
   def execute! document
     nodes = document.css('script')
@@ -36,6 +36,6 @@ class Rack::PageSpeed::Filters::MinifyJavaScripts < Rack::PageSpeed::Filters::Ba
   end
   
   def local_script? node
-    node['src'] and !(node['src'] =~ /^http/ or !(node['src'] =~ /.js$/))
+    node.name == 'script' and file_for(node)
   end
 end

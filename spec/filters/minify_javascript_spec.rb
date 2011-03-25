@@ -6,7 +6,7 @@ describe 'the minify_javascript filter' do
   end
   
   it "is a priority 8 filter" do
-    Rack::PageSpeed::Filters::MinifyJavaScripts.priority.should == 8
+    Rack::PageSpeed::Filters::MinifyJavaScripts.priority.should == 2
   end
 
   context "requires a storage mechanism to be passed via :store when initializing" do
