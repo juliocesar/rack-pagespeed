@@ -6,7 +6,7 @@ describe 'the combine_css filter' do
   end
 
   it "requires a store mechanism to be passed via :store when initializing" do
-    Rack::PageSpeed::Filters::CombineCSS.new.should be_false
+    expect { Rack::PageSpeed::Filters::CombineCSS.new }.to raise_error
   end
   
   it "is a priority 9 filter" do

@@ -83,12 +83,11 @@ describe 'rack-pagespeed configuration' do
       config.filters.count.should == 2
     end
 
-    it "won't add a filter if it's call returns false" do
+    it "calling a filter that requires storage without specifying one raises an error" do
       class NeedsStore < Rack::PageSpeed::Filter
         requires_store
       end
-      config = Rack::PageSpeed::Config.new do needs_store end
-      config.filters.should be_empty
+      expect { Rack::PageSpeed::Config.new do needs_store end }.to raise_error
     end
     
     it 'raises a NoSuchFilter error when a non-existing filter is called ' do

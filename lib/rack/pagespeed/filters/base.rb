@@ -21,7 +21,7 @@ module Rack::PageSpeed::Filters
       def requires_store
         instance_eval do
           def new options = {}
-            options[:store] ? super(options) : false
+            options[:store] ? super(options) : raise("#{name} requires :store to be specified.")
           end
         end
       end

@@ -10,8 +10,8 @@ describe 'the combine_javascripts filter' do
   end
 
   context "requires a store mechanism to be passed via :store when initializing" do
-    specify { Rack::PageSpeed::Filters::CombineJavaScripts.new.should be_false }
-    specify { Rack::PageSpeed::Filters::CombineJavaScripts.new(:store => {}).should_not be_false }
+    specify { expect { Rack::PageSpeed::Filters::CombineJavaScripts.new }.to raise_error }
+    specify { expect { Rack::PageSpeed::Filters::CombineJavaScripts.new(:store => {}) }.to_not raise_error }
   end
 
   context 'execute!' do

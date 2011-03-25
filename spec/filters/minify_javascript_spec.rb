@@ -10,8 +10,8 @@ describe 'the minify_javascript filter' do
   end
 
   context "requires a storage mechanism to be passed via :store when initializing" do
-    specify { Rack::PageSpeed::Filters::MinifyJavaScripts.new.should be_false }
-    specify { Rack::PageSpeed::Filters::MinifyJavaScripts.new(:store => {}).should_not be_false }
+    specify { expect { Rack::PageSpeed::Filters::MinifyJavaScripts.new }.to raise_error }
+    specify { expect { Rack::PageSpeed::Filters::MinifyJavaScripts.new(:store => {}) }.to_not be_false }
   end
 
   context "#execute!" do

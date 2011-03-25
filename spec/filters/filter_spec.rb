@@ -11,7 +11,7 @@ describe 'the base filter class' do
     class Moo < Rack::PageSpeed::Filter; end
     Rack::PageSpeed::Filters::Base.available_filters.should include(Moo)
   end
-
+  
   context 'the #name declaration, which can be used to declare a name which the filter can be called upon' do
     it 'can be called from inside the class' do
       class Boo < Rack::PageSpeed::Filter
