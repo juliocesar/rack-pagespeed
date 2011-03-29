@@ -86,6 +86,11 @@ describe 'rack-pagespeed' do
       it "responds with HTTP 200" do
         @status.should == 200
       end
+      
+      it "instructs clients to cache asset for 10 years" do
+        @headers['Cache-Control'].should == "public, max-age=315576000"
+        Time.parse(@headers['Expires']).to_i.should be_within(10).of(Time.now.to_i + 315576000)
+      end
     end
   end
   
