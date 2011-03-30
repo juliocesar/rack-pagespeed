@@ -26,6 +26,7 @@ GEM
     rack-test (0.5.6)
       rack (>= 1.0)
     rake (0.8.7)
+    redis (2.2.0)
     rspec (2.3.0)
       rspec-core (~> 2.3.0)
       rspec-expectations (~> 2.3.0)
@@ -54,5 +55,6 @@ DEPENDENCIES
   memcached (= 1.0.2)
   nokogiri (= 1.4.4)
   rack (= 1.2.1)
+  redis
   rspec (= 2.3.0)
   steak (= 1.0.0)

@@ -123,6 +123,18 @@ describe 'rack-pagespeed configuration' do
         specify { should be_a Rack::PageSpeed::Store::Memcached }
         specify { subject.instance_variable_get(:@client).servers.first.should =~ /127.0.0.1:11211/ }
       end
+      context 'sets to redis storage, localhost:6379 if :redis' do
+        before { @config = Rack::PageSpeed::Config.new :store => :redis }
+        subject { @config.store }
+        specify { should be_a Rack::PageSpeed::Store::Redis }
+        specify { subject.instance_variable_get(:@client).client.id.should == "redis://127.0.0.1:6379/0" }
+      end
+      context 'sets to redis storage if :redis => "server address/port"' do
+        before { @config = Rack::PageSpeed::Config.new :store => { :redis => 'localhost:6379' } }
+        subject { @config.store }
+        specify { should be_a Rack::PageSpeed::Store::Redis }
+        specify { subject.instance_variable_get(:@client).client.id.should == "redis://127.0.0.1:6379/0" }
+      end
       context "raises NoSuchStorageMechanism for weird stuff" do
         specify { expect { Rack::PageSpeed::Config.new :store => :poo }.to raise_error(Rack::PageSpeed::Config::NoSuchStorageMechanism) }
       end

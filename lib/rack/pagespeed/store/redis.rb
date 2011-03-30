@@ -1,0 +1,20 @@
+require 'redis'
+
+class Rack::PageSpeed::Store::Redis
+  def initialize address_port = nil
+    @client = if address_port.nil?
+      Redis.new
+    else
+      address, port = address_port.split(":")
+      Redis.new({ :address => address, :port => port })
+    end
+  end
+  
+  def [] key
+    @client.get key
+  end
+  
+  def []= key, value
+    @client.set key, value
+  end
+end

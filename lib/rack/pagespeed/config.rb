@@ -22,6 +22,8 @@ class Rack::PageSpeed::Config
       @store = Rack::PageSpeed::Store::Disk.new *args
     when :memcached
       @store = Rack::PageSpeed::Store::Memcached.new *args
+    when :redis
+      @store = Rack::PageSpeed::Store::Redis.new *args
     when {}
       @store = {} # simple in-memory store
     when Hash
