@@ -34,7 +34,11 @@ module Rack
       if asset = store[asset_id]
         [
           200,
-          { 'Content-Type' => (Rack::Mime.mime_type(::File.extname(asset_id))) },
+          {
+            'Content-Type' => (Rack::Mime.mime_type(::File.extname(asset_id))),
+            'Cache-Control' => "public, max-age=#{(60*60*24*365.25*10).to_i}",
+            'Expires' => (Time.now + 60*60*24*365.25*10).httpdate
+          },
           [asset]
         ]
       else
