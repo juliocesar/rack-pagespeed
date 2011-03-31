@@ -34,3 +34,5 @@ namespace :spec do
     system "rvm 1.8.7-p174,1.9.2 specs"
   end
 end
+
+task :default => :spec
