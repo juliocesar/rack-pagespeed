@@ -21,13 +21,13 @@ describe 'disk storage' do
   context 'writing' do
     it "writes to disk with a Hash-like syntax" do
       @store['omg'] = "value"
-      File.read("#{Dir.tmpdir}/rack-pagespeed-omg").should == "value"
+      File.read("#{Dir.tmpdir}/bundle-omg").should == "value"
     end
   end
 
   context 'reading' do
     it "reads from disk with a Hash-like syntax" do
-      File.open("#{Dir.tmpdir}/rack-pagespeed-hola", 'w') { |file| file << "Hola mundo" }
+      File.open("#{Dir.tmpdir}/bundle-hola", 'w') { |file| file << "Hola mundo" }
       @store['hola'].should == "Hola mundo"
     end
   end

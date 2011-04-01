@@ -31,7 +31,7 @@ class Rack::PageSpeed::Filters::CombineJavaScripts < Rack::PageSpeed::Filter
   def merge nodes, document
     nodes_id = unique_id nodes
     node = Nokogiri::XML::Node.new 'script', document
-    node['src'] = "/rack-pagespeed-#{nodes_id}.js"
+    node['src'] = "/bundle-#{nodes_id}.js"
     node
   end
   

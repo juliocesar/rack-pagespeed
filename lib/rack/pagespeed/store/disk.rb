@@ -7,12 +7,12 @@ class Rack::PageSpeed::Store::Disk
   end
 
   def [] key
-    path = "#{@path}/rack-pagespeed-#{key}"
+    path = "#{@path}/bundle-#{key}"
     File.read path if File.exists? path
   end
 
   def []= key, value
-    File.open("#{@path}/rack-pagespeed-#{key}", 'w') { |file| file << value }
+    File.open("#{@path}/bundle-#{key}", 'w') { |file| file << value }
     true
   end
 end

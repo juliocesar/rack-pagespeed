@@ -33,14 +33,14 @@ describe 'the minify_javascript filter' do
           fixture('foo.js')
         @store["#{@hash}.js"] = @bundled
         node = Nokogiri::XML::Node.new 'script', Fixtures.complex
-        node['src'] = "/rack-pagespeed-#{@hash}.js"
+        node['src'] = "/bundle-#{@hash}.js"
         Fixtures.complex.at_css('script[src*="ohno.js"]').before node
         Fixtures.complex.at_css('script[src*="ohno.js"]').remove
         Fixtures.complex.at_css('script[src*="foo.js"]').remove
         @filter.execute! Fixtures.complex
       end
 
-      it "finding a rack-pagespeed-* reference, it compresses what's in storage" do
+      it "finding a bundle-* reference, it compresses what's in storage" do
         @store["#{@hash}.js"].should == JSMin.minify(@bundled)
       end
 

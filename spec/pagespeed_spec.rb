@@ -67,12 +67,12 @@ describe 'rack-pagespeed' do
     end
   end
 
-  context 'responding to /rack-pagespeed-* requests' do
+  context 'responding to /bundle-* requests' do
     context 'for assets that it finds in store' do
       before do
         store = @pagespeed.config.store
         store['12345.js'] = 'Little poney'
-        @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-12345.js'
+        @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/bundle-12345.js'
       end
 
       it "responds with the contents in store that match the asset unique id" do
@@ -96,7 +96,7 @@ describe 'rack-pagespeed' do
   
   context "for assets that can't be found in store" do
     before do
-      @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/rack-pagespeed-nonexistent.css'
+      @status, @headers, @response = @pagespeed.call Rack::MockRequest.env_for '/bundle-nonexistent.css'
     end
     
     it "responds with HTTP 404" do

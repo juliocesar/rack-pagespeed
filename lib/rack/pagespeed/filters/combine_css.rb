@@ -51,7 +51,7 @@ class Rack::PageSpeed::Filters::CombineCSS < Rack::PageSpeed::Filter
     nodes_id = unique_id nodes
     node = Nokogiri::XML::Node.new 'link', document
     node['rel'] = 'stylesheet'
-    node['href'] = "/rack-pagespeed-#{nodes_id}.css"
+    node['href'] = "/bundle-#{nodes_id}.css"
     node
   end
 

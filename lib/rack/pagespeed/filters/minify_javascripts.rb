@@ -17,7 +17,7 @@ class Rack::PageSpeed::Filters::MinifyJavaScripts < Rack::PageSpeed::Filters::Ba
       if !node['src']
         node.content = JSMin.minify node.content
       else
-        if match = %r(^/rack-pagespeed-(.*)).match(node['src'])
+        if match = %r(^/bundle-(.*)).match(node['src'])
           store = @options[:store]
           store[match[1]] = JSMin.minify store[match[1]]
         else
@@ -26,7 +26,7 @@ class Rack::PageSpeed::Filters::MinifyJavaScripts < Rack::PageSpeed::Filters::Ba
           javascript = file.read
           hash = Digest::MD5.hexdigest file.mtime.to_i.to_s + javascript
           compressed = Nokogiri::XML::Node.new 'script', document
-          compressed['src'] = "/rack-pagespeed-#{hash}.js"
+          compressed['src'] = "/bundle-#{hash}.js"
           @options[:store]["#{hash}.js"] = JSMin.minify javascript
           node.before compressed
           node.remove

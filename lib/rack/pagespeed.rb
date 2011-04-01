@@ -13,7 +13,7 @@ module Rack
     end
 
     def call env
-      if match = %r(^/rack-pagespeed-(.*)).match(env['PATH_INFO'])
+      if match = %r(^/bundle-(.*)).match(env['PATH_INFO'])
         respond_with match[1]
       else
         status, headers, @response = @app.call(env)
