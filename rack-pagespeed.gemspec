@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Julio Cesar Ody"]
-  s.date = %q{2011-03-25}
+  s.date = %q{2011-04-02}
   s.description = %q{Web page speed optimizations at the Rack level}
   s.email = %q{julio@awesomebydesign.com}
   s.extra_rdoc_files = [
@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
     "lib/rack/pagespeed/store/all.rb",
     "lib/rack/pagespeed/store/disk.rb",
     "lib/rack/pagespeed/store/memcached.rb",
+    "lib/rack/pagespeed/store/redis.rb",
     "rack-pagespeed.gemspec",
     "spec/config_spec.rb",
     "spec/filters/combine_css_spec.rb",
@@ -81,7 +82,8 @@ Gem::Specification.new do |s|
     "spec/pagespeed_spec.rb",
     "spec/spec_helper.rb",
     "spec/store/disk_spec.rb",
-    "spec/store/memcached_spec.rb"
+    "spec/store/memcached_spec.rb",
+    "spec/store/redis_spec.rb"
   ]
   s.homepage = %q{http://github.com/juliocesar/rack-pagespeed}
   s.require_paths = ["lib"]
@@ -100,7 +102,8 @@ Gem::Specification.new do |s|
     "spec/pagespeed_spec.rb",
     "spec/spec_helper.rb",
     "spec/store/disk_spec.rb",
-    "spec/store/memcached_spec.rb"
+    "spec/store/memcached_spec.rb",
+    "spec/store/redis_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -112,6 +115,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
       s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
       s.add_runtime_dependency(%q<jsmin>, ["= 1.0.1"])
+      s.add_runtime_dependency(%q<redis>, [">= 0"])
       s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
       s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
@@ -125,6 +129,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack>, ["= 1.2.1"])
       s.add_dependency(%q<memcached>, ["= 1.0.2"])
       s.add_dependency(%q<jsmin>, ["= 1.0.1"])
+      s.add_dependency(%q<redis>, [">= 0"])
       s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_dependency(%q<rack>, ["= 1.2.1"])
       s.add_dependency(%q<memcached>, ["= 1.0.2"])
@@ -139,6 +144,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rack>, ["= 1.2.1"])
     s.add_dependency(%q<memcached>, ["= 1.0.2"])
     s.add_dependency(%q<jsmin>, ["= 1.0.1"])
+    s.add_dependency(%q<redis>, [">= 0"])
     s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
     s.add_dependency(%q<rack>, ["= 1.2.1"])
     s.add_dependency(%q<memcached>, ["= 1.0.2"])
