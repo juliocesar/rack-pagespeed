@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-pagespeed}
-  s.version = "1.0.5"
+  s.version = "1.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Julio Cesar Ody"]
@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
     "lib/rack/pagespeed/filters/inline_images.rb",
     "lib/rack/pagespeed/filters/inline_javascripts.rb",
     "lib/rack/pagespeed/filters/minify_javascripts.rb",
-    "lib/rack/pagespeed/store/all.rb",
     "lib/rack/pagespeed/store/disk.rb",
     "lib/rack/pagespeed/store/memcached.rb",
     "lib/rack/pagespeed/store/redis.rb",
@@ -54,6 +53,7 @@ Gem::Specification.new do |s|
     "spec/fixtures/jquery-1.4.1.min.js",
     "spec/fixtures/medialess1.css",
     "spec/fixtures/medialess2.css",
+    "spec/fixtures/mock_store.rb",
     "spec/fixtures/mylib.js",
     "spec/fixtures/noexternalcss.html",
     "spec/fixtures/noscripts.html",
@@ -87,7 +87,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/juliocesar/rack-pagespeed}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.7.1}
   s.summary = %q{Web page speed optimizations at the Rack level}
   s.test_files = [
     "spec/config_spec.rb",
@@ -98,6 +98,7 @@ Gem::Specification.new do |s|
     "spec/filters/inline_images_spec.rb",
     "spec/filters/inline_javascript_spec.rb",
     "spec/filters/minify_javascript_spec.rb",
+    "spec/fixtures/mock_store.rb",
     "spec/integration/integration_spec.rb",
     "spec/pagespeed_spec.rb",
     "spec/spec_helper.rb",
@@ -107,15 +108,12 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
-      s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
       s.add_runtime_dependency(%q<jsmin>, ["= 1.0.1"])
-      s.add_runtime_dependency(%q<redis>, [">= 0"])
       s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
       s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
@@ -127,9 +125,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_dependency(%q<rack>, ["= 1.2.1"])
-      s.add_dependency(%q<memcached>, ["= 1.0.2"])
       s.add_dependency(%q<jsmin>, ["= 1.0.1"])
-      s.add_dependency(%q<redis>, [">= 0"])
       s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
       s.add_dependency(%q<rack>, ["= 1.2.1"])
       s.add_dependency(%q<memcached>, ["= 1.0.2"])
@@ -142,9 +138,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
     s.add_dependency(%q<rack>, ["= 1.2.1"])
-    s.add_dependency(%q<memcached>, ["= 1.0.2"])
     s.add_dependency(%q<jsmin>, ["= 1.0.1"])
-    s.add_dependency(%q<redis>, [">= 0"])
     s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
     s.add_dependency(%q<rack>, ["= 1.2.1"])
     s.add_dependency(%q<memcached>, ["= 1.0.2"])
