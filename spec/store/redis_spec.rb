@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "redis storage" do
   before :all do
-    Rack::PageSpeed::Config # load all storage mechanisms
     @store = Rack::PageSpeed::Store::Redis.new
     @client = @store.instance_variable_get(:@client)
   end

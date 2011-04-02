@@ -1,7 +1,7 @@
 class Rack::PageSpeed::Config
   class NoSuchFilter < StandardError; end
   class NoSuchStorageMechanism < StandardError; end
-  load "#{::File.dirname(__FILE__)}/store/all.rb"
+  load "#{::File.dirname(__FILE__)}/store/disk.rb"
 
   attr_reader :filters, :public
 
@@ -18,14 +18,10 @@ class Rack::PageSpeed::Config
   def store type = nil, *args
     return @store unless type
     case type
-    when :disk
-      @store = Rack::PageSpeed::Store::Disk.new *args
-    when :memcached
-      @store = Rack::PageSpeed::Store::Memcached.new *args
-    when :redis
-      @store = Rack::PageSpeed::Store::Redis.new *args
     when {}
-      @store = {} # simple in-memory store
+      @store = {} # simple in-memory store      
+    when Symbol
+      @store = load_storage type, *args
     when Hash
       store *type.to_a.first
     else
@@ -70,5 +66,14 @@ class Rack::PageSpeed::Config
         @filters << instance if instance and !@filters.select { |k| k.is_a? instance.class }.any?
       end
     end
+  end
+  
+  def load_storage type, *args
+    klass = type.to_s.capitalize
+    unless Rack::PageSpeed::Store.const_defined? klass
+      lib = ::File.join(::File.dirname(__FILE__), 'store', type.to_s) 
+      load lib
+    end
+    Rack::PageSpeed::Store.const_get(klass).new *args
   end
 end

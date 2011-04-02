@@ -49,7 +49,7 @@ describe 'rack-pagespeed configuration' do
       config.filters.first.should be_a MakesItLookGood
     end
 
-    it "if it's a hash, it let's you pass options to the filters logically" do
+    it "if it's a hash, it let's you pass options to the filters" do
       config = Rack::PageSpeed::Config.new :filters => {:makes_it_look_good => {:test => 6000}}
       filter = config.filters.first
       filter.should be_a MakesItLookGood
@@ -97,104 +97,14 @@ describe 'rack-pagespeed configuration' do
 
   context 'setting a storage mechanism' do
     before { File.stub(:directory?).and_return(true) }
-
-    context 'through the hash options' do
-      context ':disk => "directory path" sets to disk storage, with a specific path' do
-        before  { @config = Rack::PageSpeed::Config.new :store => { :disk => Fixtures.path } }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == Fixtures.path }
-      end
-      context ":disk sets to disk storage, in the system's temp dir" do
-        before  { @config = Rack::PageSpeed::Config.new :store => :disk }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == Dir.tmpdir }
-      end
-      context 'sets to memcache storage if :memcache => "server address/port"' do
-        before  { @config = Rack::PageSpeed::Config.new :store => { :memcached => 'localhost:11211' } }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Memcached }
-        specify { subject.instance_variable_get(:@client).servers.first.should =~ /localhost:11211/ }
-      end
-      context 'sets to memcache storage, 127.0.0.1:11211 if :memcache"' do
-        before  { @config = Rack::PageSpeed::Config.new :store => :memcached }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Memcached }
-        specify { subject.instance_variable_get(:@client).servers.first.should =~ /127.0.0.1:11211/ }
-      end
-      context 'sets to redis storage, localhost:6379 if :redis' do
-        before { @config = Rack::PageSpeed::Config.new :store => :redis }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Redis }
-        specify { subject.instance_variable_get(:@client).client.id.should == "redis://127.0.0.1:6379/0" }
-      end
-      context 'sets to redis storage if :redis => "server address/port"' do
-        before { @config = Rack::PageSpeed::Config.new :store => { :redis => 'localhost:6379' } }
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Redis }
-        specify { subject.instance_variable_get(:@client).client.id.should == "redis://127.0.0.1:6379/0" }
-      end
-      context "raises NoSuchStorageMechanism for weird stuff" do
-        specify { expect { Rack::PageSpeed::Config.new :store => :poo }.to raise_error(Rack::PageSpeed::Config::NoSuchStorageMechanism) }
-      end
-    end
-
-    context 'through a block passed to the initializer' do
-      context 'to a simple Hash, if {} gets passed' do
-        before do
-          @config = Rack::PageSpeed::Config.new do
-            store({})
-          end
+    
+    it 'loads the appropriate class on request' do
+      ::File.stub(:join).and_return(File.dirname(__FILE__) + '/fixtures/mock_store.rb')
+      expect {
+        Rack::PageSpeed::Config.new do
+          store :mock
         end
-        subject { @config.store }
-        specify { should == {} }
-      end
-      context 'to disk storage, in a specific path if :disk => "some directory path"' do
-        before do
-          @config = Rack::PageSpeed::Config.new do
-            store :disk => Fixtures.path
-          end
-        end
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == Fixtures.path }
-      end
-      context ":disk sets to disk storage, in the system's temp dir" do
-        before do
-          @config = Rack::PageSpeed::Config.new do
-            store :disk
-          end
-        end
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Disk }
-        specify { subject.instance_variable_get(:@path).should == Dir.tmpdir }
-      end
-      context 'sets to memcache storage if :memcache => "server address/port"' do
-        before do
-          @config = Rack::PageSpeed::Config.new do
-            store :memcached => 'localhost:11211'
-          end
-        end
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Memcached }
-        specify { subject.instance_variable_get(:@client).servers.first.should =~ /localhost:11211/ }
-      end
-      context 'sets to memcache storage, localhost:11211 if :memcache"' do
-        before do
-          @config = Rack::PageSpeed::Config.new do
-            store :memcached
-          end
-        end
-        subject { @config.store }
-        specify { should be_a Rack::PageSpeed::Store::Memcached }
-        specify { subject.instance_variable_get(:@client).servers.first.should =~ /127.0.0.1:11211/ }
-      end
-      context "raises NoSuchStorageMechanism for weird stuff" do
-        specify do
-          expect { Rack::PageSpeed::Config.new do store :poo end }.to raise_error(Rack::PageSpeed::Config::NoSuchStorageMechanism)
-        end
-      end
+      }.to change { Rack::PageSpeed::Store.const_defined?('Mock') }.from(false).to(true)
     end
   end
 end

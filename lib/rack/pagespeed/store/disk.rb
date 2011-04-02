@@ -1,5 +1,7 @@
 require 'tmpdir'
 
+module Rack::PageSpeed::Store; end
+
 class Rack::PageSpeed::Store::Disk
   def initialize path = Dir.tmpdir
     raise ArgumentError, "#{path} is not a directory" unless File.directory? path
