@@ -1,4 +1,8 @@
-require 'redis'
+begin
+  require 'redis'
+rescue LoadError
+  raise LoadError, ":redis store requires the redis gem to be installed."
+end
 
 class Rack::PageSpeed::Store::Redis
   def initialize address_port = nil
