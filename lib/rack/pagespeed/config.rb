@@ -72,7 +72,7 @@ class Rack::PageSpeed::Config
     klass = type.to_s.capitalize
     unless Rack::PageSpeed::Store.const_defined? klass
       lib = ::File.join(::File.dirname(__FILE__), 'store', type.to_s) 
-      load lib
+      require lib
     end
     Rack::PageSpeed::Store.const_get(klass).new *args
   end

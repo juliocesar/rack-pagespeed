@@ -1,6 +1,9 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'rubygems'
 require 'rspec'
 require 'fileutils'
+require 'memcached'
+require 'redis'
 require 'rack/pagespeed'
 require 'rack/pagespeed/store/disk'
 require 'rack/pagespeed/store/memcached'
