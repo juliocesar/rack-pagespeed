@@ -10,10 +10,12 @@ class Rack::PageSpeed::Store::Dalli
   end
   
   def [] key
+    puts "getting key: #{key}"
     @client.get key
   end
   
   def []= key, value
+    puts "setting key: #{key}"
     @client.set key, value
     true
   end
