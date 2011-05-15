@@ -5,17 +5,15 @@ rescue LoadError
 end
 
 class Rack::PageSpeed::Store::Dalli
-  def initialize address_port = nil
-    @client = Dalli::Client.new address_port
+  def initialize opts
+    @client = Dalli::Client.new(opts[:servers], :username => opts[:username], :password => opts[:password])
   end
   
   def [] key
-    puts "getting key: #{key}"
     @client.get key
   end
   
   def []= key, value
-    puts "setting key: #{key}"
     @client.set key, value
     true
   end
