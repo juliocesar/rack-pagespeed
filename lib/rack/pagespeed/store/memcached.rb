@@ -1,13 +1,13 @@
 begin
-  require 'memcached' # wanted to use Dalli, but it just ain't working here right now
+  require 'dalli'
 rescue LoadError
-  raise LoadError, ":memcached store requires the memcached gem to be installed."
+  raise LoadError, ":memcached store requires the dalli gem to be installed."
 end
 
 class Rack::PageSpeed::Store::Memcached
-  def initialize address_port = nil
-    @client = Memcached.new address_port
-    @client.stats # let it raise errors if it can't connect
+  def initialize options
+    @client = Dalli::Client.new *options
+    # @client.stats # let it raise errors if it can't connect
   end
   
   def [] key
