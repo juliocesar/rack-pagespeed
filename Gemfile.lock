@@ -55,7 +55,7 @@ DEPENDENCIES
   dalli
   jsmin
   memcached
-  nokogiri (= 1.4.4)
+  nokogiri
   rack
   redis
   rspec (= 2.3.0)
