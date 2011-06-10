@@ -1,7 +1,7 @@
 source :rubygems
 
-gem 'nokogiri',     '1.4.4'
 gem 'rack'    # Just let it work with latest. If the API breaks, I'll fix it
+gem 'nokogiri'
 gem 'jsmin'
 gem 'dalli'
 
