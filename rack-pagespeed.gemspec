@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-pagespeed}
-  s.version = "1.0.8"
+  s.version = "1.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Julio Cesar Ody"]
-  s.date = %q{2011-06-11}
+  s.authors = [%q{Julio Cesar Ody}]
+  s.date = %q{2011-06-13}
   s.description = %q{Web page speed optimizations at the Rack level}
   s.email = %q{julio@awesomebydesign.com}
   s.extra_rdoc_files = [
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "Gemfile",
-    "Gemfile.lock",
     "README.md",
     "Rakefile",
     "VERSION",
@@ -86,8 +85,8 @@ Gem::Specification.new do |s|
     "spec/store/redis_spec.rb"
   ]
   s.homepage = %q{http://github.com/juliocesar/rack-pagespeed}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.5}
   s.summary = %q{Web page speed optimizations at the Rack level}
   s.test_files = [
     "spec/config_spec.rb",
@@ -108,7 +107,6 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
