@@ -15,14 +15,15 @@ begin
     gem.email               = "julio@awesomebydesign.com"
     gem.homepage            = "http://github.com/juliocesar/rack-pagespeed"
     gem.authors             = "Julio Cesar Ody"
-    gem.add_dependency      'nokogiri',   '1.4.4'
-    gem.add_dependency      'rack',       '1.2.1'
-    gem.add_dependency      'memcached',  '1.0.2'
-    gem.add_dependency      'mime-types', '1.16'
-    gem.add_dependency      'jsmin',      '1.0.1'
-    gem.add_development_dependency 'rspec', '2.1.0'
-    gem.add_development_dependency 'steak', '1.0.0'
-    gem.add_development_dependency 'capybara', '0.4.0'
+    gem.add_dependency      'nokogiri'
+    gem.add_dependency      'rack'
+    gem.add_dependency      'mime-types'
+    gem.add_dependency      'jsmin'
+    gem.add_development_dependency 'redis'
+    gem.add_development_dependency 'dalli'
+    gem.add_development_dependency 'rspec', '~> 2.3.0'
+    gem.add_development_dependency 'steak', '~> 1.0.0'
+    gem.add_development_dependency 'capybara', '~> 0.4.0'
   end
 rescue LoadError
   puts 'Jeweler not available. gemspec tasks OFF.'
