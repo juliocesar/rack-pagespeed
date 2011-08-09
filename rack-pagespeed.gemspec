@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-pagespeed}
-  s.version = "1.0.9"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Julio Cesar Ody}]
-  s.date = %q{2011-06-13}
+  s.date = %q{2011-08-09}
   s.description = %q{Web page speed optimizations at the Rack level}
   s.email = %q{julio@awesomebydesign.com}
   s.extra_rdoc_files = [
@@ -88,23 +88,6 @@ Gem::Specification.new do |s|
   s.require_paths = [%q{lib}]
   s.rubygems_version = %q{1.8.5}
   s.summary = %q{Web page speed optimizations at the Rack level}
-  s.test_files = [
-    "spec/config_spec.rb",
-    "spec/filters/combine_css_spec.rb",
-    "spec/filters/combine_javascripts_spec.rb",
-    "spec/filters/filter_spec.rb",
-    "spec/filters/inline_css_spec.rb",
-    "spec/filters/inline_images_spec.rb",
-    "spec/filters/inline_javascript_spec.rb",
-    "spec/filters/minify_javascript_spec.rb",
-    "spec/fixtures/mock_store.rb",
-    "spec/integration/integration_spec.rb",
-    "spec/pagespeed_spec.rb",
-    "spec/spec_helper.rb",
-    "spec/store/disk_spec.rb",
-    "spec/store/memcached_spec.rb",
-    "spec/store/redis_spec.rb"
-  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -114,41 +97,38 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
       s.add_runtime_dependency(%q<jsmin>, [">= 0"])
       s.add_runtime_dependency(%q<dalli>, [">= 0"])
-      s.add_runtime_dependency(%q<nokogiri>, ["= 1.4.4"])
-      s.add_runtime_dependency(%q<rack>, ["= 1.2.1"])
-      s.add_runtime_dependency(%q<memcached>, ["= 1.0.2"])
-      s.add_runtime_dependency(%q<mime-types>, ["= 1.16"])
-      s.add_runtime_dependency(%q<jsmin>, ["= 1.0.1"])
-      s.add_development_dependency(%q<rspec>, ["= 2.1.0"])
-      s.add_development_dependency(%q<steak>, ["= 1.0.0"])
-      s.add_development_dependency(%q<capybara>, ["= 0.4.0"])
+      s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
+      s.add_runtime_dependency(%q<rack>, [">= 0"])
+      s.add_runtime_dependency(%q<memcached>, [">= 0"])
+      s.add_runtime_dependency(%q<mime-types>, [">= 0"])
+      s.add_runtime_dependency(%q<jsmin>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["= 2.6.0"])
+      s.add_development_dependency(%q<capybara>, ["= 1.1.0"])
     else
       s.add_dependency(%q<rack>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<jsmin>, [">= 0"])
       s.add_dependency(%q<dalli>, [">= 0"])
-      s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
-      s.add_dependency(%q<rack>, ["= 1.2.1"])
-      s.add_dependency(%q<memcached>, ["= 1.0.2"])
-      s.add_dependency(%q<mime-types>, ["= 1.16"])
-      s.add_dependency(%q<jsmin>, ["= 1.0.1"])
-      s.add_dependency(%q<rspec>, ["= 2.1.0"])
-      s.add_dependency(%q<steak>, ["= 1.0.0"])
-      s.add_dependency(%q<capybara>, ["= 0.4.0"])
+      s.add_dependency(%q<nokogiri>, [">= 0"])
+      s.add_dependency(%q<rack>, [">= 0"])
+      s.add_dependency(%q<memcached>, [">= 0"])
+      s.add_dependency(%q<mime-types>, [">= 0"])
+      s.add_dependency(%q<jsmin>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["= 2.6.0"])
+      s.add_dependency(%q<capybara>, ["= 1.1.0"])
     end
   else
     s.add_dependency(%q<rack>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<jsmin>, [">= 0"])
     s.add_dependency(%q<dalli>, [">= 0"])
-    s.add_dependency(%q<nokogiri>, ["= 1.4.4"])
-    s.add_dependency(%q<rack>, ["= 1.2.1"])
-    s.add_dependency(%q<memcached>, ["= 1.0.2"])
-    s.add_dependency(%q<mime-types>, ["= 1.16"])
-    s.add_dependency(%q<jsmin>, ["= 1.0.1"])
-    s.add_dependency(%q<rspec>, ["= 2.1.0"])
-    s.add_dependency(%q<steak>, ["= 1.0.0"])
-    s.add_dependency(%q<capybara>, ["= 0.4.0"])
+    s.add_dependency(%q<nokogiri>, [">= 0"])
+    s.add_dependency(%q<rack>, [">= 0"])
+    s.add_dependency(%q<memcached>, [">= 0"])
+    s.add_dependency(%q<mime-types>, [">= 0"])
+    s.add_dependency(%q<jsmin>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["= 2.6.0"])
+    s.add_dependency(%q<capybara>, ["= 1.1.0"])
   end
 end
 
