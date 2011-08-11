@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-pagespeed}
-  s.version = "1.1.0"
+  s.version = "1.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Julio Cesar Ody}]
-  s.date = %q{2011-08-09}
+  s.date = %q{2011-08-11}
   s.description = %q{Web page speed optimizations at the Rack level}
   s.email = %q{julio@awesomebydesign.com}
   s.extra_rdoc_files = [
