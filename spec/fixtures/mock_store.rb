@@ -1,3 +1,2 @@
-class Rack::PageSpeed::Store::Mock
-  
+class Rack::PageSpeed::Store::Mock  
 end

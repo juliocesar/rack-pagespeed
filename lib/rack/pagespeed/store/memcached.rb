@@ -5,8 +5,8 @@ rescue LoadError
 end
 
 class Rack::PageSpeed::Store::Memcached
-  def initialize *options
-    @client = Dalli::Client.new *options
+  def initialize *args
+    @client = Dalli::Client.new *args
     # @client.stats # let it raise errors if it can't connect
   end
   

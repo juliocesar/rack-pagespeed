@@ -5,13 +5,8 @@ rescue LoadError
 end
 
 class Rack::PageSpeed::Store::Redis
-  def initialize address_port = nil
-    @client = if address_port.nil?
-      Redis.new
-    else
-      address, port = address_port.split(":")
-      Redis.new({ :address => address, :port => port })
-    end
+  def initialize *args
+    @client = Redis.new *args
   end
   
   def [] key
