@@ -20,8 +20,10 @@ begin
     gem.add_dependency      'memcached'
     gem.add_dependency      'mime-types'
     gem.add_dependency      'jsmin'
+    gem.add_development_dependency 'rake'
     gem.add_development_dependency 'rspec', '2.6.0'
     gem.add_development_dependency 'capybara', '1.1.0'
+    gem.add_development_dependency 'jeweler', '~> 1.8.3'
   end
 rescue LoadError
   puts 'Jeweler not available. gemspec tasks OFF.'
