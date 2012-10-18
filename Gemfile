@@ -6,7 +6,6 @@ gemspec
 gem 'rack'    # Just let it work with latest. If the API breaks, I'll fix it
 gem 'nokogiri'
 gem 'jsmin'
-gem 'dalli'
 
 # Required for development
 gem 'rake'
