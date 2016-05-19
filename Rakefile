@@ -35,3 +35,83 @@ namespace :spec do
     system "rvm 1.8.7-p174,1.9.2 specs"
   end
 end
+
+SPEC_DIR = File.expand_path(File.join("..", "spec"), __FILE__)
+DB_DIR = File.join(SPEC_DIR, "db")
+
+REDIS_CNF = File.join(SPEC_DIR, "redis_test.conf")
+REDIS_PID = File.join(SPEC_DIR, "db", "redis.pid")
+REDIS_LOCATION = ENV['REDIS_LOCATION']
+
+MEMCACHE_PID = File.join(SPEC_DIR, "db", "memcache.pid")
+MEMCACHE_LOCATION = ENV['MEMCACHE_LOCATION']
+
+desc "Create the DB_DIR"
+task :create_db_dir do
+  unless Dir.exists?(DB_DIR)
+    Dir.mkdir(DB_DIR)
+  end
+end
+
+desc "Start the Redis server"
+task :start_redis do
+  redis_running = \
+    begin
+      File.exists?(REDIS_PID) && Process.kill(0, File.read(REDIS_PID).to_i)
+    rescue Errno::ESRCH
+      FileUtils.rm REDIS_PID
+      false
+    end
+  
+  if REDIS_LOCATION
+    system "#{REDIS_LOCATION}/redis-server #{REDIS_CNF}" unless redis_running
+  else
+    system "redis-server #{REDIS_CNF}" unless redis_running
+  end
+end
+
+desc "Stop the Redis server"
+task :stop_redis do
+  if File.exists?(REDIS_PID)
+    begin
+      Process.kill "INT", File.read(REDIS_PID).to_i
+    rescue Errno::ESRCH
+    ensure 
+      FileUtils.rm REDIS_PID
+    end
+  end
+end
+
+desc "Start the memcached server"
+task :start_memcached do
+  memcached_running = \
+    begin
+      File.exists?(MEMCACHE_PID) && Process.kill(0, File.read(MEMCACHE_PID).to_i)
+    rescue Errno::ESRCH
+      FileUtils.rm MEMCACHE_PID
+      false
+    end
+  
+  if MEMCACHE_LOCATION
+    system "#{MEMCACHE_LOCATION}/memcached -d -P #{MEMCACHE_PID}" unless memcached_running
+  else
+    system "memcached -d -P #{MEMCACHE_PID}" unless memcached_running
+  end
+end
+
+desc "Stop the memcached server"
+task :stop_memcached do
+  if File.exists?(MEMCACHE_PID)
+    begin
+      Process.kill "INT", File.read(MEMCACHE_PID).to_i
+    rescue Errno::ESRCH
+    ensure 
+      FileUtils.rm MEMCACHE_PID
+    end
+  end
+end
+
+desc "Run specs and manage server start/stop"
+task :spec_with_services => [:create_db_dir, :start_redis, :start_memcached, :spec, :stop_redis, :stop_memcached]
+
+task :default => :spec
